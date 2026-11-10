@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Programma Premi TikTok – Guadagna fino a €950</title>
+  <meta name="description" content="TikTok sta pagando gli utenti per rispondere a un breve sondaggio. Guadagna fino a €950 oggi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #fe2c55;
+      --brand-dark: #c4002e;
+      --accent: #25f4ee;
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #1a1a1a;
+      --text: #ffffff;
+      --muted: #9ca3af;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --radius: 14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── LIVE BAR ── */
+    .live-bar {
+      width: 100%;
+      background: var(--brand);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .4; transform: scale(1.4); }
+    }
+
+    /* ── BADGE ── */
+    .badge-wrap {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+    }
+    .badge {
+      background: var(--surface2);
+      border: 1px solid #333;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .badge svg { width: 15px; height: 15px; fill: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 560px;
+      width: 100%;
+      padding: 24px 20px 0;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(22px, 5.5vw, 34px);
+      font-weight: 900;
+      line-height: 1.18;
+      margin-top: 20px;
+    }
+    .hero h1 span { color: var(--brand); }
+
+    /* ── SOCIAL PROOF ── */
+    .proof-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .proof-chip {
+      background: var(--surface2);
+      border: 1px solid #2a2a2a;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .proof-chip.hot { color: var(--yellow); border-color: #3a3000; background: #1c1800; }
+
+    /* ── PROGRESS ── */
+    .scarcity {
+      max-width: 560px;
+      width: 100%;
+      padding: 20px 20px 0;
+    }
+    .scarcity-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .scarcity-label strong { color: var(--brand); }
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #2a2a2a;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 77%;
+      background: linear-gradient(90deg, var(--brand-dark), var(--brand));
+      border-radius: 999px;
+      animation: fill-in .9s ease-out forwards;
+    }
+    @keyframes fill-in {
+      from { width: 0; }
+      to   { width: 77%; }
+    }
+    .scarcity-warn {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand);
+      text-align: center;
+    }
+
+    /* ── CARDS ── */
+    .cards {
+      max-width: 560px;
+      width: 100%;
+      padding: 24px 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid #222;
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .card-title span { color: var(--brand); }
+    .card-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* ── LOCATION ── */
+    .location-wrap {
+      max-width: 560px;
+      width: 100%;
+      padding: 20px 20px 0;
+    }
+    .location-box {
+      background: var(--surface);
+      border: 1px solid #222;
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .location-box svg { width: 18px; height: 18px; fill: var(--brand); flex-shrink: 0; }
+    #location-text { color: var(--text); font-weight: 600; }
+
+    /* ── CTA ── */
+    .cta-wrap {
+      max-width: 560px;
+      width: 100%;
+      padding: 28px 20px 0;
+    }
+    .cta-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: .5px;
+      border: none;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 8px 32px rgba(254,44,85,.35);
+      transition: transform .15s, box-shadow .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(254,44,85,.5); }
+    .cta-btn:active { transform: translateY(0); }
+
+    /* ── TRUST BADGES ── */
+    .trust {
+      max-width: 560px;
+      width: 100%;
+      padding: 16px 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .trust-item svg { width: 15px; height: 15px; fill: var(--green); }
+
+    /* ── FOOTER ── */
+    footer {
+      max-width: 560px;
+      width: 100%;
+      padding: 24px 20px 32px;
+      text-align: center;
+      font-size: 11px;
+      color: #555;
+      line-height: 1.6;
+      margin-top: auto;
+    }
+    footer a { color: #666; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- LIVE BAR -->
+  <div class="live-bar">
+    <span class="live-dot"></span>
+    IN DIRETTA · Posti disponibili si stanno riempiendo ora
+  </div>
+
+  <!-- PARTNER BADGE -->
+  <div class="badge-wrap">
+    <div class="badge">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      Partner Ufficiale TikTok For Business
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>TikTok sta <span>pagando gli utenti</span> della tua regione per rispondere a un breve sondaggio</h1>
+  </div>
+
+  <!-- SOCIAL PROOF CHIPS -->
+  <div class="proof-row">
+    <div class="proof-chip hot">🔥 247 persone stanno partecipando ora</div>
+    <div class="proof-chip">🕐 Offerta valida solo oggi</div>
+  </div>
+
+  <!-- SCARCITY -->
+  <div class="scarcity">
+    <div class="scarcity-label">
+      <span>Posti disponibili oggi</span>
+      <strong>Rimangono solo 23 posti!</strong>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+    <div class="scarcity-warn">⚡ 77% dei posti già occupati — 23/100 rimasti</div>
+  </div>
+
+  <!-- BENEFIT CARDS -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">💶</div>
+      <div>
+        <div class="card-title"><span>€50 a €150</span> per domanda</div>
+        <div class="card-sub">Ogni risposta conta subito — nessuna attesa</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div>
+        <div class="card-title">Pagamento entro <span>5 minuti</span></div>
+        <div class="card-sub">Nessuna commissione, nessuna burocrazia — diretto sul tuo conto</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏆</div>
+      <div>
+        <div class="card-title">Fino a <span>€950 totali</span></div>
+        <div class="card-sub">Completa tutte le domande e massimizza il guadagno</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  <div class="location-wrap">
+    <div class="location-box">
+      <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span>Verifica disponibilità per: <span id="location-text">la tua area...</span></span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <button class="cta-btn" onclick="handleCTA()">
+      🎯 GARANTISCI IL MIO POSTO ORA
+    </button>
+  </div>
+
+  <!-- TRUST -->
+  <div class="trust">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      100% Sicuro
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      +50.000 partecipanti
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+      Verificato
+    </div>
+  </div>
+
+  <footer>
+    Partecipando, accetti i nostri <a href="#">Termini e Condizioni</a>.<br/>
+    Questo sondaggio è disponibile per un periodo limitato per gli utenti idonei in Italia.<br/>
+    TikTok For Business · Milano, Italia
+  </footer>
+
+  <script>
+    // Simula geolocalização italiana
+    const cities = [
+      "Milano, Lombardia", "Roma, Lazio", "Napoli, Campania",
+      "Torino, Piemonte", "Palermo, Sicilia", "Bologna, Emilia-Romagna",
+      "Firenze, Toscana", "Bari, Puglia", "Catania, Sicilia", "Venezia, Veneto"
+    ];
+    const city = cities[Math.floor(Math.random() * cities.length)];
+    document.getElementById("location-text").textContent = city;
+
+    // Contagem decrescente de vagas (simulada)
+    let spots = 23;
+    setInterval(() => {
+      if (spots > 1 && Math.random() < 0.3) {
+        spots--;
+        document.querySelectorAll('.scarcity-label strong, .scarcity-warn').forEach(el => {
+          if (el.classList.contains('scarcity-warn')) {
+            el.textContent = `⚡ 77% dei posti già occupati — ${spots}/100 rimasti`;
+          } else {
+            el.textContent = `Rimangono solo ${spots} posti!`;
+          }
+        });
+      }
+    }, 8000);
+
+    function handleCTA() {
+      // Redirecionar para upsell/checkout quando disponível
+      alert("Reindirizzamento al sondaggio...\n\n[Collegare qui l'URL del prossimo step del funnel]");
+    }
+  </script>
+</body>
+</html>
