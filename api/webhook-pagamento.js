@@ -4,7 +4,7 @@
 
 import crypto from 'crypto';
 
-const WEBHOOK_SECRET = process.env.XXPAY_WEBHOOK_SECRET || 'cbs_KGowRc7rdhCCjDqp2N5aoD0Y2Xbb87lhZaFVYCiJ';
+const WEBHOOK_SECRET = process.env.XXPAY_WEBHOOK_SECRET || 'whsec_ViuZIipBWp4smQ2IOd9y56WbO9Csbpig';
 
 export const config = { api: { bodyParser: false } };
 
