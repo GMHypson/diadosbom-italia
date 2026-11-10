@@ -234,6 +234,7 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
 
 </div>
 
+<script src="upsell-pay.js"></script>
 <script>
 (function(){
   var params  = new URLSearchParams(window.location.search);
@@ -248,44 +249,32 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
   document.getElementById('valRecevi').textContent   = fmt(total);
 
   // Counter flutuante
-  var base = 38 + Math.floor(Math.random()*8);
-  document.getElementById('counterNum').textContent = base;
+  var cnt = 38 + Math.floor(Math.random()*8);
+  document.getElementById('counterNum').textContent = cnt;
   setInterval(function(){
-    var delta = Math.random() < .5 ? -1 : 1;
-    base = Math.max(28, Math.min(55, base + delta));
-    document.getElementById('counterNum').textContent = base;
+    cnt = Math.max(28, Math.min(55, cnt + (Math.random() < .5 ? -1 : 1)));
+    document.getElementById('counterNum').textContent = cnt;
   }, 4200);
 
   // Timer 15 min
   var secs = 15*60 - 1;
   var timerEl = document.getElementById('timerCount');
-  var timerInt = setInterval(function(){
-    if(secs <= 0){ clearInterval(timerInt); timerEl.textContent = '00:00'; return; }
-    var m = Math.floor(secs/60), s = secs%60;
-    timerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  setInterval(function(){
+    if(secs <= 0){ timerEl.textContent = '00:00'; return; }
+    timerEl.textContent = String(Math.floor(secs/60)).padStart(2,'0') + ':' + String(secs%60).padStart(2,'0');
     secs--;
   }, 1000);
 
-  // CTA
-  document.getElementById('btnCta').addEventListener('click', function(){
-    var btn = this;
-    btn.classList.add('loading');
-    btn.querySelector('.btn-text').textContent = 'Generazione pagamento…';
-    setTimeout(function(){
-      var dest = new URL('checkout-buck.html', window.location.href);
-      params.forEach(function(v,k){ dest.searchParams.set(k,v); });
-      dest.searchParams.set('taxa', imposta.toFixed(2));
-      dest.searchParams.set('total', total.toFixed(2));
-      window.location.href = dest.toString();
-    }, 900);
-  });
-
-  // Skip → próximo upsell ou fim
+  // Skip
   document.getElementById('skipLink').addEventListener('click', function(){
     var dest = new URL('up2.html', window.location.href);
     params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    dest.searchParams.delete('auto');
     window.location.href = dest.toString();
   });
+
+  // Auto-pagamento via upsell-pay.js
+  UpsellPay.init({ taxa: imposta, nextPage: 'up2.html' });
 })();
 </script>
 </body>

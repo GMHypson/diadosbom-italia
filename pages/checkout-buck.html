@@ -290,8 +290,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
       var nextAction = payment.next_action;
 
       if(nextAction && nextAction.type === 'redirect' && nextAction.url){
-        // Salva o payment_id antes de sair — polling ao voltar do Satispay
-        try { localStorage.setItem('xxpay_pending_id', payment.id); } catch(e){}
+        // Salva payment_id e dados do pagador para os upsells usarem
+        try {
+          localStorage.setItem('xxpay_pending_id', payment.id);
+          localStorage.setItem('xxpay_payer_name',  nome);
+          localStorage.setItem('xxpay_payer_email', email);
+        } catch(e){}
         showToast('🔴 Reindirizzamento a Satispay…');
         setTimeout(function(){ window.location.href = nextAction.url; }, 700);
 
@@ -354,6 +358,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     document.getElementById('pollOverlay').classList.remove('active');
     var dest = new URL('up1.html', window.location.href);
     params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    dest.searchParams.set('auto', '1'); // dispara pagamento automático no upsell
+    dest.searchParams.delete('taxa');   // taxa do checkout não contamina os upsells
     window.location.href = dest.toString();
   }
 

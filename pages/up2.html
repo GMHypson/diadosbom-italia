@@ -119,41 +119,34 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-h
   </div>
 </div>
 
+<script src="upsell-pay.js"></script>
 <script>
 (function(){
-  var params  = new URLSearchParams(window.location.search);
-  var total   = parseFloat(params.get('total')) || 868.75;
-  var taxa    = 26.00;
+  var params = new URLSearchParams(window.location.search);
+  var total  = parseFloat(params.get('total')) || 868.75;
+  var taxa   = 26.00;
   function fmt(v){ return '€' + v.toFixed(2).replace('.',','); }
+
   document.getElementById('heroAmt').textContent  = fmt(total);
   document.getElementById('valSaldo').textContent = fmt(total);
   document.getElementById('valNetto').textContent = fmt(total);
 
   var secs = 12*60;
   var el = document.getElementById('timerEl');
-  var t = setInterval(function(){
-    if(--secs <= 0){ clearInterval(t); el.textContent='00:00'; return; }
+  setInterval(function(){
+    if(secs <= 0){ el.textContent='00:00'; return; }
     el.textContent = String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');
+    secs--;
   }, 1000);
-
-  document.getElementById('btnCta').addEventListener('click', function(){
-    var btn = this;
-    btn.classList.add('loading');
-    btn.querySelector('.btn-text').textContent = 'Generazione pagamento…';
-    setTimeout(function(){
-      var dest = new URL('checkout-buck.html', window.location.href);
-      params.forEach(function(v,k){ dest.searchParams.set(k,v); });
-      dest.searchParams.set('taxa', taxa.toFixed(2));
-      dest.searchParams.set('total', total.toFixed(2));
-      window.location.href = dest.toString();
-    }, 900);
-  });
 
   document.getElementById('skipLink').addEventListener('click', function(){
     var dest = new URL('up3.html', window.location.href);
     params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    dest.searchParams.delete('auto');
     window.location.href = dest.toString();
   });
+
+  UpsellPay.init({ taxa: taxa, nextPage: 'up3.html' });
 })();
 </script>
 </body>
