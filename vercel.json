@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/pages/index.html" },
+    { "source": "/",           "destination": "/pages/index.html" },
     { "source": "/:page.html", "destination": "/pages/:page.html" },
-    { "source": "/:page", "destination": "/pages/:page.html" }
+    { "source": "/:page",      "destination": "/pages/:page.html" }
   ]
 }
