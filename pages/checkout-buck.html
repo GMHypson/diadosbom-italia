@@ -198,13 +198,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
   document.getElementById('priceTotal').textContent    = fmt(taxaParam);
   document.getElementById('successAmount').textContent = fmtS(totalParam);
 
-  // Volta do redirect Satispay com ?payment=<id>&status=<status>
+  // Volta do redirect Satispay — tenta pelo param ?payment= ou pelo localStorage
   var returnPaymentId = params.get('payment');
   var returnStatus    = params.get('status');
+  if(!returnPaymentId){
+    try { returnPaymentId = localStorage.getItem('xxpay_pending_id'); } catch(e){}
+  }
   if(returnPaymentId){
+    // Limpa o localStorage para não reusar em visitas futuras
+    try { localStorage.removeItem('xxpay_pending_id'); } catch(e){}
     if(returnStatus === 'paid'){
       showSuccess();
     } else {
+      // Polling para ver o status real
       startPolling(returnPaymentId);
     }
   }
@@ -250,13 +256,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     var nome  = document.getElementById('inputNome').value.trim();
     var email = document.getElementById('inputEmail').value.trim();
 
-    // return_url: a API substituirá {payment} e {status} automaticamente
+    // return_url: URL simples de retorno sem placeholders (XXPay não os aceita)
+    // O payment_id fica salvo no localStorage para polling ao voltar
     var base = window.location.href.split('?')[0];
     var returnUrl = base +
       '?total=' + totalParam.toFixed(2) +
       '&taxa='  + taxaParam.toFixed(2) +
-      (params.get('src') ? '&src=' + params.get('src') : '') +
-      '&payment={payment}&status={status}';
+      (params.get('src') ? '&src=' + encodeURIComponent(params.get('src')) : '');
 
     fetch('/api/criar-pagamento', {
       method: 'POST',
@@ -284,17 +290,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
       var nextAction = payment.next_action;
 
       if(nextAction && nextAction.type === 'redirect' && nextAction.url){
-        // Fluxo padrão Satispay: redireciona para a URL de pagamento
+        // Salva o payment_id antes de sair — polling ao voltar do Satispay
+        try { localStorage.setItem('xxpay_pending_id', payment.id); } catch(e){}
         showToast('🔴 Reindirizzamento a Satispay…');
         setTimeout(function(){ window.location.href = nextAction.url; }, 700);
 
       } else if(nextAction && (nextAction.type === 'mbway' || nextAction.type === 'bizum')){
-        // Push para o app — polling
         showToast('📱 Richiesta inviata all\'app!');
         startPolling(payment.id);
 
       } else {
-        // Sem next_action (confirmação imediata) ou tipo desconhecido — polling
         startPolling(payment.id);
       }
     })
