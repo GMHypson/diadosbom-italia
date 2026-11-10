@@ -1,9 +1,10 @@
 // Vercel Serverless Function — POST /api/criar-pagamento
 // Cria um pagamento XXPay via Satispay (EUR) sem expor o client_secret no front.
 
-const CLIENT_ID     = process.env.XXPAY_CLIENT_ID     || 'xxc_1dcb0qb6z93nyjdaon0fmlhfpua6';
-const CLIENT_SECRET = process.env.XXPAY_CLIENT_SECRET || 'xxs_MUr8CQCk3Q0DSPkM8FMsmI60ijTMQJCJElSDirUN';
-const BASE_URL      = 'https://api.xxpayconnect.com/api/v1/public';
+const CLIENT_ID      = process.env.XXPAY_CLIENT_ID      || 'xxc_1dcb0qb6z93nyjdaon0fmlhfpua6';
+const CLIENT_SECRET  = process.env.XXPAY_CLIENT_SECRET  || 'xxs_MUr8CQCk3Q0DSPkM8FMsmI60ijTMQJCJElSDirUN';
+const BASE_URL       = 'https://api.xxpayconnect.com/api/v1/public';
+const CALLBACK_URL   = process.env.XXPAY_CALLBACK_URL   || 'https://diadosbom-italia.vercel.app/api/webhook-pagamento';
 
 export default async function handler(req, res) {
   // CORS — só permite a origem do próprio funil
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
   try { body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body; }
   catch { return res.status(400).json({ error: 'JSON inválido' }); }
 
-  const { amount, name, email, external_reference, return_url, callback_url } = body || {};
+  const { amount, name, email, external_reference, return_url } = body || {};
 
   if (!amount || isNaN(amount) || Number(amount) <= 0) {
     return res.status(422).json({ error: 'amount inválido' });
@@ -39,8 +40,8 @@ export default async function handler(req, res) {
       email,
       country: 'IT',
     },
-    ...(return_url   && { return_url }),
-    ...(callback_url && { callback_url }),
+    callback_url: CALLBACK_URL,
+    ...(return_url && { return_url }),
   };
 
   try {
