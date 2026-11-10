@@ -225,6 +225,71 @@ const cities = geoCity
   ? [geoCity]
   : ["Milano","Roma","Napoli","Torino","Palermo","Genova","Bologna","Firenze","Bari","Venezia"];
 
+// ── Web Audio: cashregister synthesiser ─────────────────────────────────────
+var _audioCtx = null;
+function _getCtx(){
+  if(!_audioCtx) _audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  return _audioCtx;
+}
+function playCoinSound(){
+  try{
+    var ctx = _getCtx();
+    if(ctx.state === 'suspended') ctx.resume();
+    var now = ctx.currentTime;
+
+    // 1) Ping metálico (sinal de caixa registradora)
+    var osc1 = ctx.createOscillator();
+    var env1 = ctx.createGain();
+    osc1.type = 'triangle';
+    osc1.frequency.setValueAtTime(1200, now);
+    osc1.frequency.exponentialRampToValueAtTime(900, now + 0.06);
+    env1.gain.setValueAtTime(0.55, now);
+    env1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc1.connect(env1); env1.connect(ctx.destination);
+    osc1.start(now); osc1.stop(now + 0.36);
+
+    // 2) Segundo ping (harmónico)
+    var osc2 = ctx.createOscillator();
+    var env2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(2200, now + 0.04);
+    osc2.frequency.exponentialRampToValueAtTime(1600, now + 0.12);
+    env2.gain.setValueAtTime(0, now);
+    env2.gain.setValueAtTime(0.3, now + 0.04);
+    env2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc2.connect(env2); env2.connect(ctx.destination);
+    osc2.start(now + 0.04); osc2.stop(now + 0.41);
+
+    // 3) Ruído de gaveta/câmera (noise burst curto)
+    var bufSz = ctx.sampleRate * 0.08;
+    var buf = ctx.createBuffer(1, bufSz, ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for(var i=0;i<bufSz;i++) d[i] = (Math.random()*2-1)*0.15;
+    var ns = ctx.createBufferSource();
+    var envN = ctx.createGain();
+    var filt = ctx.createBiquadFilter();
+    filt.type = 'bandpass'; filt.frequency.value = 3000; filt.Q.value = 0.7;
+    ns.buffer = buf;
+    envN.gain.setValueAtTime(0.6, now);
+    envN.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    ns.connect(filt); filt.connect(envN); envN.connect(ctx.destination);
+    ns.start(now); ns.stop(now + 0.09);
+
+    // 4) Moeda caindo (terceiro ping, mais leve)
+    var osc3 = ctx.createOscillator();
+    var env3 = ctx.createGain();
+    osc3.type = 'sine';
+    osc3.frequency.setValueAtTime(600, now + 0.1);
+    osc3.frequency.exponentialRampToValueAtTime(420, now + 0.3);
+    env3.gain.setValueAtTime(0, now);
+    env3.gain.setValueAtTime(0.25, now + 0.1);
+    env3.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    osc3.connect(env3); env3.connect(ctx.destination);
+    osc3.start(now + 0.1); osc3.stop(now + 0.46);
+  } catch(e){}
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 let curQ=0, sel=null, total=0, accumulatedSinceLastModal=0;
 
 function fmt(v){return'€'+v.toFixed(2).replace('.',',')}
@@ -338,6 +403,7 @@ function _doConfirm(){
       if(rewIcon) rewIcon.textContent = '🎁';
       if(rewTitle) { rewTitle.textContent = 'Nuova ricompensa!'; rewTitle.style.color = 'var(--reward)'; }
     }
+    playCoinSound();
     document.getElementById('rew-ov').classList.add('on');
     animVal(el, accumulatedSinceLastModal);
     accumulatedSinceLastModal=0;
