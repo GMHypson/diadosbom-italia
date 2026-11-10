@@ -343,12 +343,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     .catch(function(){ /* rede instável — continua tentando */ });
   }
 
-  // ── Sucesso ───────────────────────────────────────────────────────────────
+  // ── Sucesso → redireciona para upsell 1 ──────────────────────────────────
   function showSuccess(){
     clearInterval(pollInterval);
     document.getElementById('pollOverlay').classList.remove('active');
-    document.getElementById('successOverlay').classList.add('active');
-    spawnConfetti();
+    var dest = new URL('up1.html', window.location.href);
+    params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    window.location.href = dest.toString();
   }
 
   function spawnConfetti(){

